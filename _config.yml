@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Parsa Hariri Personal blog"
+title                    : "Parsa Hariri"
 title_separator          : "-"
 name                     : &name "Parsa Hariri"
 description              : &description "bioinformatician"
