@@ -9,31 +9,138 @@ author_profile: true
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Display</title>
+    <title>PARSA HARIRI - Bioinformatician</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        .pdf-container {
-            width: 80%;
-            height: 90vh;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        h1, h2 {
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info {
+            margin-bottom: 40px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #4CAF50;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="pdf-container">
-        <object data="https://raw.githubusercontent.com/Parsa744/Parsa744.github.io/master/files/Parsa.pdf" type="application/pdf" width="100%" height="100%">
-            <p>Your browser does not support PDFs. Please download the PDF to view it: 
-            <a href="https://raw.githubusercontent.com/Parsa744/Parsa744.github.io/master/files/Parsa.pdf">Download CV</a>.</p>
-        </object>
-    </div>
+
+    <header>
+        <h1>PARSA HARIRI</h1>
+        <p>Bioinformatician</p>
+    </header>
+
+    <section>
+        <div class="info">
+            <h2>About Me</h2>
+            <p>
+                Currently, I am pursuing a Master's degree in Computational Biology and Bioinformatics at the University of Göttingen,
+                where I have developed advanced computational skills to tackle complex biological challenges.
+            </p>
+        </div>
+
+        <div class="info">
+            <h2>Education</h2>
+            <ul>
+                <li>
+                    <strong>Master of Science in Bioinformatics</strong> (2022 – Current)<br>
+                    Georg-August-Universität Göttingen, Germany<br>
+                    Thesis: Smart microscopy: microscopy image segmentation, cell tracking and more
+                </li>
+                <li>
+                    <strong>Bachelor of Science in Biotechnology</strong> (08/2017 – 10/2022)<br>
+                    University of Tehran, Iran<br>
+                    Thesis: Optimization of Laccase enzyme production<br>
+                    Biotechnology: Biotech is a combination of 2-year scientific courses and 2-year engineering courses.
+                </li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h2>Work Experience</h2>
+            <ul>
+                <li>
+                    <strong>Internship</strong> (07/2024 – 08/2024)<br>
+                    Georg-August-Universität Göttingen, Medical Bioinformatics Department, Germany<br>
+                    Role: Explainable AI for cancer detection using SHAP values
+                </li>
+                <li>
+                    <strong>Research Assistant</strong> (11/2023 – 04/2024)<br>
+                    Max Planck Institute for Multidisciplinary Sciences, Germany<br>
+                    Role: Setting up software for electron microscopy image analysis
+                </li>
+                <li>
+                    <strong>Research Assistant</strong> (01/2023 – 09/2023)<br>
+                    Max Planck Institute for Dynamics and Self-Organization, Germany<br>
+                    Role: Enhancing the performance of spiking neural networks
+                </li>
+                <li>
+                    <strong>Teaching Assistant</strong> (04/2023 – 09/2023)<br>
+                    Georg-August-Universität Göttingen, Germany<br>
+                    Role: Designed and graded homework for “Python Programming for Data Science”
+                </li>
+                <li>
+                    <strong>Research Assistant</strong> (01/2020 – 07/2021)<br>
+                    Enzyme Technology Lab, Tehran University of Medical Sciences, Iran<br>
+                    Technic: Bicinchoninic Acid Assay
+                </li>
+                <li>
+                    <strong>Teaching Assistant</strong> (09/2020 – 12/2021)<br>
+                    University of Tehran, Iran<br>
+                    Role: Designed and graded homework for “Python Programming” and “Dynamics of Biological Systems”
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Parsa Hariri - All Rights Reserved</p>
+    </footer>
+
 </body>
 </html>
