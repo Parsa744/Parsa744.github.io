@@ -1,5 +1,5 @@
-### Computational Biology and Bioinformatics (M.Sc.) , University of Göttingen , part 2
-# This is the 2th part of my review of the master's courses at the University of Göttingen.
+## Computational Biology and Bioinformatics (M.Sc.) , University of Göttingen , part 2
+### This is the 2th part of my review of the master's courses at the University of Göttingen.
 Generally, there isn't much going on in the summer...
 
 1. `Machine Learning (6 C):` It is definitely an important course, full of useful stuff. You need to do exercises (in groups of three people) for the exam, but the exam has nothing to do with them; it is just the math of ML.overall score: 8/10.
