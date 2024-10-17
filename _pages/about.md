@@ -22,7 +22,18 @@ Hello! My name is Parsa, and I work as a computational biologist and bioinformat
     {% endfor %}
   </div>
 </section>
-
+<section>
+  <h2>Latest publications</h2>
+  <div class="publications-list">
+    {% for post in site.publications limit: 1 %}
+      <article class="project-item">
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <p>{{ post.excerpt }}</p>
+        <p><a href="{{ post.url }}">Read more</a></p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
 <section>
   <h2>Latest Posts</h2>
   <div class="posts-list">
