@@ -1,5 +1,5 @@
 ## Computational Biology and Bioinformatics (M.Sc.) at the University of Göttingen
-# Overview of the Master's Degree in Computational Biology and Bioinformatics
+### Overview of the Master's Degree in Computational Biology and Bioinformatics
 ### Application
 Applications for this degree typically open from April 1 to May 15. Applicants must have a bachelor's degree in biology or a related field, English proficiency at C1 level (IELTS 6.5), and must pass a knowledge test. The test covers general biology and includes some programming essay questions.
 The program spans two years, with the first three semesters dedicated to coursework, followed by an internship (preferably in the lab where you plan to write your master's thesis), and finally, the thesis. The thesis can be undertaken in any lab that specializes in computational biology or bioinformatics, offering considerable flexibility.
