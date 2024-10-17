@@ -13,7 +13,8 @@ Hello! My name is Parsa, and I work as a computational biologist and bioinformat
 <section>
   <h2>Latest Projects</h2>
   <div class="projects-list">
-    {% for post in site.projects limit: 3 %}
+    {% assign sorted_projects = site.projects | sort: 'date' | reverse %}
+    {% for post in sorted_projects limit: 3 %}
       <article class="project-item">
         <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
         <p>{{ post.excerpt }}</p>
@@ -25,9 +26,11 @@ Hello! My name is Parsa, and I work as a computational biologist and bioinformat
 
 
 
+
 <section>
   <h2>Latest Posts</h2>
   <div class="posts-list">
+    {% assign sorted_projects = site.posts | sort: 'date' | reverse %}
     {% for post in site.posts limit: 3 %}
       <article class="project-item">
         <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
