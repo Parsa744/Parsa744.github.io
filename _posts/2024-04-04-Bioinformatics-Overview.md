@@ -1,5 +1,5 @@
 ## Computational Biology and Bioinformatics (M.Sc.) , University of Göttingen
-# This is the first part of my review of the master's courses at the University of Göttingen.
+### This is the first part of my review of the master's courses at the University of Göttingen.
 
 1. `Python for Data Science (5 credits):`  This course is too easy if you already know the basics of Python. Despite promises of covering Natural Language Processing (NLP), the topic is barely touched upon—they merely acknowledge its existence. There's no exam; instead, you need to complete a group project with 3 to 6 team members. The course operates on a pass/fail basis. overall score: 5/10.
 
