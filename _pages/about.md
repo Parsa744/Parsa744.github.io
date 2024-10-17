@@ -23,6 +23,8 @@ Hello! My name is Parsa, and I work as a computational biologist and bioinformat
   </div>
 </section>
 
+
+
 <section>
   <h2>Latest Posts</h2>
   <div class="posts-list">
