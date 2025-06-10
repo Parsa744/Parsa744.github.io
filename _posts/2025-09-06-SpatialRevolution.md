@@ -1,3 +1,7 @@
+---
+layout: default
+title: "Spatial Multi-Omics Integration: A Visual Report"
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
