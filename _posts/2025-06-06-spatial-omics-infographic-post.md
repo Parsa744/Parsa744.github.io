@@ -12,7 +12,6 @@ tags:
 last_modified_at: 2025-06-10
 ---
 
-Welcome to our latest deep dive into the fascinating world of spatial metabolomics and spatial transcriptomics data integration! We've created an interactive infographic to visually explore the key challenges, cutting-edge methodologies, and exciting future directions in this rapidly evolving field.
 
 This infographic translates complex scientific concepts into an easily digestible visual narrative, covering everything from data acquisition challenges to the latest deep learning integration methods and their applications in disease understanding.
 
