@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Spatial Multi-Omics Integration: A Visual Report"
-collection: talks
+collection: posts
 type: "posts"
 ---
 
