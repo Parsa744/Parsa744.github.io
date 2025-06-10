@@ -1,8 +1,7 @@
 ---
 layout: default
 title: "Spatial Multi-Omics Integration: A Visual Report"
-custom_css: true
-custom_js: true
+
 ---
 
 <!-- External Resources -->
