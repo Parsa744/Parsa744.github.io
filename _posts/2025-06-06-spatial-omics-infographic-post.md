@@ -4,7 +4,7 @@ title: "Spatial Multi-Omics Integration: A Visual Report"
 collection: posts
 type: "posts"
 ---
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -558,3 +558,4 @@ type: "posts"
     </script>
 </body>
 </html>
+
