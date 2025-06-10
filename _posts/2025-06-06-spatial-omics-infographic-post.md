@@ -11,38 +11,38 @@ custom_js: true
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <!--
-    Narrative & Structure Plan:
-    1. Introduction: Hook with the "why," then define Spatial Transcriptomics (ST) & Metabolomics (SM).
-    2. Core Challenges: Visualize resolution mismatch and data sparsity. Show solutions.
-    3. Integration Methodologies: Explain latent space learning with a flowchart and compare DL models.
-    4. Applications & Impact: Showcase where this tech is making a difference (e.g., cancer, neurology) and its limitations.
-    5. Future Horizon: Look at emerging tech and barriers to adoption.
-    This structure tells a story from the fundamental problem to the future outlook.
-    -->
-    <!--
-    Visualization Selection & Justification:
-    - Section 1 (Intro): Big Number (HTML) to inform with impact. HTML Cards to organize concepts.
-    - Section 2 (Challenges): HTML/CSS Diagram to inform about resolution mismatch visually. Donut Chart (Chart.js/Canvas) to compare solution categories. Bar Chart (Chart.js/Canvas) to compare effectiveness of imputation methods.
-    - Section 3 (Methods): Flow Chart (HTML/CSS) to organize the complex integration process. Radar Chart (Chart.js/Canvas) to compare multiple facets of different deep learning models.
-    - Section 4 (Applications): Stacked Bar Chart (Chart.js/Canvas) to compare impact across fields. HTML/CSS Diagram to organize the concept of cell communication. Table (HTML) to organize a direct comparison of successes vs. limitations.
-    - Section 5 (Future): Timeline (HTML/CSS) to show change over time. HTML/CSS Diagram for a metaphorical representation of barriers.
-    All choices adhere to the NO SVG / NO MERMAID JS constraint.
-    -->
-    <!--
-    Color Palette Selection: "Brilliant Blues"
-    - #001219 (Background)
-    - #005f73 (Primary Teal)
-    - #0a9396 (Secondary Teal)
-    - #94d2bd (Light Teal/Accent)
-    - #e9d8a6 (Light Beige/Accent)
-    - #ee9b00 (Accent Orange)
-    - #ca6702 (Accent Orange/Red)
-    - #bb3e03 (Accent Red)
-    - #ae2012 (Accent Red)
-    - #ffffff (Text)
-    -->
-    <!-- CONFIRMATION: NEITHER SVG NOR MERMAID JS WAS USED IN THIS DOCUMENT. ALL VISUALIZATIONS ARE PURE HTML/CSS/TAILWIND OR JAVASCRIPT/CANVAS (CHART.JS). -->
+<!--
+Narrative & Structure Plan:
+1. Introduction: Hook with the "why," then define Spatial Transcriptomics (ST) & Metabolomics (SM).
+2. Core Challenges: Visualize resolution mismatch and data sparsity. Show solutions.
+3. Integration Methodologies: Explain latent space learning with a flowchart and compare DL models.
+4. Applications & Impact: Showcase where this tech is making a difference (e.g., cancer, neurology) and its limitations.
+5. Future Horizon: Look at emerging tech and barriers to adoption.
+This structure tells a story from the fundamental problem to the future outlook.
+-->
+<!--
+Visualization Selection & Justification:
+- Section 1 (Intro): Big Number (HTML) to inform with impact. HTML Cards to organize concepts.
+- Section 2 (Challenges): HTML/CSS Diagram to inform about resolution mismatch visually. Donut Chart (Chart.js/Canvas) to compare solution categories. Bar Chart (Chart.js/Canvas) to compare effectiveness of imputation methods.
+- Section 3 (Methods): Flow Chart (HTML/CSS) to organize the complex integration process. Radar Chart (Chart.js/Canvas) to compare multiple facets of different deep learning models.
+- Section 4 (Applications): Stacked Bar Chart (Chart.js/Canvas) to compare impact across fields. HTML/CSS Diagram to organize the concept of cell communication. Table (HTML) to organize a direct comparison of successes vs. limitations.
+- Section 5 (Future): Timeline (HTML/CSS) to show change over time. HTML/CSS Diagram for a metaphorical representation of barriers.
+All choices adhere to the NO SVG / NO MERMAID JS constraint.
+-->
+<!--
+Color Palette Selection: "Brilliant Blues"
+- #001219 (Background)
+- #005f73 (Primary Teal)
+- #0a9396 (Secondary Teal)
+- #94d2bd (Light Teal/Accent)
+- #e9d8a6 (Light Beige/Accent)
+- #ee9b00 (Accent Orange)
+- #ca6702 (Accent Orange/Red)
+- #bb3e03 (Accent Red)
+- #ae2012 (Accent Red)
+- #ffffff (Text)
+-->
+<!-- CONFIRMATION: NEITHER SVG NOR MERMAID JS WAS USED IN THIS DOCUMENT. ALL VISUALIZATIONS ARE PURE HTML/CSS/TAILWIND OR JAVASCRIPT/CANVAS (CHART.JS). -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
