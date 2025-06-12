@@ -8,8 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Slate & Sky -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues (Dark Theme) -->
     <!-- Application Structure Plan: The SPA is designed as a top-down interactive dashboard with a clear narrative flow. It starts with a high-level summary (The Big Picture), moves to quantitative market data (Market Dynamics), explores the core technology (The AI Revolution), profiles the key actors (Innovation Ecosystem), examines business strategies (Business Models), showcases real-world impact (Applications), and concludes with a specific Business Plan for Enzosol. This structure was chosen to first establish the market opportunity and then present Enzosol as the solution. -->
     <!-- Visualization & Content Choices: 
         1. Market Forecasts -> Goal: Compare -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Hover for tooltips showing specific values. -> Justification: A bar chart is ideal for comparing the market size and CAGR projections from different sources, providing a quick visual summary of the strong growth trend.
@@ -17,66 +17,17 @@
         3. Company Profiles -> Goal: Compare & Organize -> Viz: Filterable HTML Table -> Interaction: Buttons to filter companies by type. -> Justification: A table provides structured data for competitive analysis.
         4. Business Models & Business Plan -> Goal: Inform & Organize -> Viz: Accordion-style collapsible sections (HTML/CSS/JS) -> Interaction: Click to expand/collapse. -> Justification: Accordions present detailed textual information concisely, perfect for a business plan.
     -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NEITHER SVG NOR MERMAID JS WAS USED IN THIS DOCUMENT. ALL VISUALIZATIONS ARE PURE HTML/CSS/TAILWIND OR JAVASCRIPT/CANVAS (CHART.JS). -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
-            color: #334155; /* slate-700 */
-        }
-        .section-title {
-            color: #0f172a; /* slate-900 */
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-link.active, .nav-link:hover {
-            color: #0284c7; /* sky-600 */
-            border-bottom-color: #0284c7; /* sky-600 */
-        }
-        .stat-card {
-            background-color: white;
-            border: 1px solid #e2e8f0; /* slate-200 */
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-        }
-        .tab-button {
-            transition: all 0.3s ease;
-            border-bottom: 2px solid transparent;
-        }
-        .tab-button.active {
-            color: #0284c7; /* sky-600 */
-            border-bottom-color: #0284c7; /* sky-600 */
-        }
-        .company-filter-btn {
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .company-filter-btn.active {
-            background-color: #0c4a6e; /* sky-900 */
-            color: white;
-        }
-        .accordion-header {
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .accordion-header:hover {
-             background-color: #f1f5f9; /* slate-100 */
-        }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            background-color: #001219;
+            color: #ffffff;
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
             height: 400px;
@@ -87,75 +38,97 @@
                 height: 450px;
             }
         }
+        .gradient-text {
+            background: linear-gradient(90deg, #94d2bd, #ee9b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #94d2bd;
+            border-bottom-color: #94d2bd;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            color: #94d2bd; /* light teal */
+            border-bottom-color: #94d2bd;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+    <header class="bg-[#001219]/80 backdrop-blur-lg shadow-2xl shadow-teal-900/10 sticky top-0 z-50 border-b border-teal-900/50">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-slate-800">Enzosol: AI-Powered Protein Design</h1>
+                    <h1 class="text-xl font-bold gradient-text">Enzosol</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Overview</a>
-                        <a href="#market" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Market</a>
-                        <a href="#ai-tech" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">AI Tech</a>
-                        <a href="#ecosystem" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Ecosystem</a>
-                        <a href="#business" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Business Models</a>
-                        <a href="#applications" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Applications</a>
-                        <a href="#business-plan" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600">Business Plan</a>
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Overview</a>
+                        <a href="#market" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Market</a>
+                        <a href="#ai-tech" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">AI Tech</a>
+                        <a href="#ecosystem" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Ecosystem</a>
+                        <a href="#business" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Models</a>
+                        <a href="#applications" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Applications</a>
+                        <a href="#business-plan" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Business Plan</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <main class="container mx-auto px-4 py-8 md:py-16">
         
-        <section id="overview" class="scroll-mt-20 mb-16">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl section-title">The AI Revolution in Protein Design</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An interactive exploration of the market, technology, and key players transforming biology with artificial intelligence. This dashboard synthesizes extensive research into a digestible format, highlighting the key forces shaping this dynamic field.</p>
-            </div>
+        <section id="overview" class="text-center mb-24">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">The AI Revolution in Protein Design</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-12">An interactive exploration of the market, technology, and key players transforming biology with artificial intelligence. This dashboard synthesizes extensive research into a digestible format, highlighting the key forces shaping this dynamic field.</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <div class="stat-card">
-                    <p class="text-4xl font-bold text-sky-600">~15%+ CAGR</p>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Projected Market Growth</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <p class="text-4xl font-bold text-[#94d2bd]">~15%+ CAGR</p>
+                    <p class="mt-2 text-sm font-medium text-gray-400">Projected Market Growth</p>
                 </div>
-                <div class="stat-card">
-                    <p class="text-4xl font-bold text-sky-600">>200M</p>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Predicted Structures by AlphaFold</p>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <p class="text-4xl font-bold text-[#94d2bd]">>200M</p>
+                    <p class="mt-2 text-sm font-medium text-gray-400">Predicted Structures by AlphaFold</p>
                 </div>
-                <div class="stat-card">
-                    <p class="text-4xl font-bold text-sky-600">>99%</p>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Data Reduction by pLLMs</p>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <p class="text-4xl font-bold text-[#ee9b00]">>99%</p>
+                    <p class="mt-2 text-sm font-medium text-gray-400">Data Reduction by pLLMs</p>
                 </div>
-                <div class="stat-card">
-                    <p class="text-4xl font-bold text-sky-600">$1B+</p>
-                    <p class="mt-2 text-sm font-medium text-slate-500">Value of Top Pharma Partnerships</p>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <p class="text-4xl font-bold text-[#ee9b00]">$1B+</p>
+                    <p class="mt-2 text-sm font-medium text-gray-400">Value of Top Pharma Partnerships</p>
                 </div>
             </div>
         </section>
 
-        <section id="market" class="scroll-mt-20 mb-16">
-            <h2 class="text-3xl font-bold section-title mb-2">Market Dynamics</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">The global protein engineering market is experiencing explosive growth, with multiple independent reports forecasting strong double-digit annual growth. This section visualizes and breaks down the key drivers and regional trends fueling this expansion.</p>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <h3 class="text-xl font-semibold text-slate-800 mb-4">Market Size Projections (2024-2035)</h3>
-                <p class="text-sm text-slate-500 mb-6">This chart aggregates data from various market reports to compare forecasted market valuations. Hover over the bars to see specific data points, including base year value, forecast year value, and the Compound Annual Growth Rate (CAGR).</p>
+        <section id="market" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Market Dynamics</h2>
+            <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800 mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">Market Size Projections (2024-2035)</h3>
+                <p class="text-gray-300 mb-6 text-center max-w-3xl mx-auto">The global protein engineering market is experiencing explosive growth. This chart aggregates data to compare forecasted market valuations. Hover over the bars to see specific data points, including base year value, forecast year value, and the Compound Annual Growth Rate (CAGR).</p>
                 <div class="chart-container">
                     <canvas id="marketChart"></canvas>
                 </div>
             </div>
             
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-semibold text-slate-800 mb-2">Key Growth Drivers</h3>
-                    <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="font-bold text-lg mb-2 text-[#94d2bd]">Key Growth Drivers</h3>
+                    <ul class="space-y-2 text-sm text-gray-300 list-disc list-inside">
                         <li>Rising demand for protein-based therapeutics.</li>
                         <li>Increasing prevalence of chronic diseases.</li>
                         <li>Technological leaps in AI and synthetic biology.</li>
@@ -163,68 +136,68 @@
                         <li>Growing R&D investment from public and private sectors.</li>
                     </ul>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-semibold text-slate-800 mb-2">Regional Hubs</h3>
-                     <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
-                        <li><strong>North America:</strong> Current market leader due to mature industry and high investment.</li>
-                        <li><strong>Europe:</strong> Strong, steady growth with robust academic and research clusters.</li>
-                        <li><strong>Asia Pacific:</strong> Projected fastest growth, driven by rising healthcare spend and biotech startups.</li>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="font-bold text-lg mb-2 text-[#94d2bd]">Regional Hubs</h3>
+                     <ul class="space-y-2 text-sm text-gray-300 list-disc list-inside">
+                        <li><strong>North America:</strong> Current market leader.</li>
+                        <li><strong>Europe:</strong> Strong, steady growth.</li>
+                        <li><strong>Asia Pacific:</strong> Projected fastest growth.</li>
                     </ul>
                 </div>
-                 <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-semibold text-slate-800 mb-2">The *In Silico* Engine</h3>
-                    <p class="text-sm text-slate-600">The computational (*in silico*) protein design segment is a key engine of growth. Valued at $2.11B in 2023, it's projected to hit <strong class="text-slate-800">$11.5B by 2035</strong> at a CAGR of 15.17%, highlighting the industry's shift towards AI-driven methods.</p>
+                 <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="font-bold text-lg mb-2 text-[#94d2bd]">The *In Silico* Engine</h3>
+                    <p class="text-sm text-gray-300">The computational protein design segment is a key growth engine, projected to hit <strong class="text-[#e9d8a6]">$11.5B by 2035</strong> at a CAGR of 15.17%.</p>
                 </div>
             </div>
         </section>
 
-        <section id="ai-tech" class="scroll-mt-20 mb-16">
-            <h2 class="text-3xl font-bold section-title mb-2">The AI Technology Stack</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">Artificial intelligence is not a single tool but a collection of powerful technologies that are reshaping protein engineering. Explore the core components of the modern AI design toolkit by clicking the tabs below.</p>
+        <section id="ai-tech" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">The AI Technology Stack</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">Artificial intelligence is not a single tool but a collection of powerful technologies. Explore the core components of the modern AI design toolkit by clicking the tabs below.</p>
             
-            <div class="bg-white rounded-lg shadow-sm border border-slate-200">
-                <div class="border-b border-slate-200">
+            <div class="bg-[#002933] rounded-xl shadow-2xl border border-teal-800">
+                <div class="border-b border-teal-800">
                     <nav class="-mb-px flex space-x-6 px-6" aria-label="Tabs">
-                        <button id="tab-btn-alphafold" class="tab-button active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Structure Prediction</button>
-                        <button id="tab-btn-generative" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Generative Design</button>
-                        <button id="tab-btn-optimization" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">ML Optimization</button>
+                        <button id="tab-btn-alphafold" class="tab-button active text-gray-300 hover:text-white whitespace-nowrap py-4 px-1 font-medium text-sm">Structure Prediction</button>
+                        <button id="tab-btn-generative" class="tab-button text-gray-300 hover:text-white whitespace-nowrap py-4 px-1 font-medium text-sm">Generative Design</button>
+                        <button id="tab-btn-optimization" class="tab-button text-gray-300 hover:text-white whitespace-nowrap py-4 px-1 font-medium text-sm">ML Optimization</button>
                     </nav>
                 </div>
-                <div class="p-6">
+                <div class="p-8">
                     <div id="tab-content-alphafold" class="tab-content">
-                        <h3 class="text-lg font-semibold text-slate-800">AI in Protein Structure Prediction (e.g., AlphaFold)</h3>
-                        <p class="mt-2 text-slate-600">This technology addresses the 50-year-old challenge of predicting a protein's 3D shape from its amino acid sequence. AI models like Google DeepMind's AlphaFold achieve accuracy comparable to experimental methods, but in a fraction of the time and cost. This provides the foundational structural understanding needed for rational drug discovery and protein design. The public AlphaFold database now contains over 200 million predicted structures, democratizing this crucial information for researchers worldwide.</p>
+                        <h3 class="text-xl font-bold text-[#94d2bd]">AI in Protein Structure Prediction (e.g., AlphaFold)</h3>
+                        <p class="mt-2 text-gray-300">This technology addresses the 50-year-old challenge of predicting a protein's 3D shape from its amino acid sequence. It provides the foundational structural understanding needed for rational drug discovery and protein design. The public AlphaFold database now contains over 200 million predicted structures, democratizing this crucial information for researchers worldwide.</p>
                     </div>
                     <div id="tab-content-generative" class="tab-content hidden">
-                        <h3 class="text-lg font-semibold text-slate-800">Generative AI for Novel Protein Design (e.g., RFdiffusion, pLLMs)</h3>
-                        <p class="mt-2 text-slate-600">Moving beyond prediction, generative AI creates entirely new proteins (*de novo* design) that don't exist in nature. Tools like RFdiffusion act like "sculptors," building novel protein backbones, while Protein Large Language Models (pLLMs) learn the "grammar" of proteins from vast sequence databases to generate new, functional sequences. This technology allows scientists to explore a massive design space, creating bespoke proteins for specific therapeutic or industrial applications.</p>
+                        <h3 class="text-xl font-bold text-[#94d2bd]">Generative AI for Novel Protein Design (e.g., RFdiffusion, pLLMs)</h3>
+                        <p class="mt-2 text-gray-300">Moving beyond prediction, generative AI creates entirely new proteins (*de novo* design) that don't exist in nature. Tools like RFdiffusion and Protein Large Language Models (pLLMs) learn the "grammar" of proteins to generate new, functional sequences, allowing scientists to explore a massive design space for therapeutic or industrial applications.</p>
                     </div>
                     <div id="tab-content-optimization" class="tab-content hidden">
-                        <h3 class="text-lg font-semibold text-slate-800">Machine Learning for Optimization and Function Prediction</h3>
-                        <p class="mt-2 text-slate-600">Machine learning models are used to refine and optimize AI-generated or existing proteins. By learning the complex relationships between sequence, structure, and function from experimental data, these models can predict how mutations will affect properties like stability, binding affinity, or catalytic activity. This guides the engineering process, reducing the need for costly and time-consuming laboratory screening and enabling the multi-parameter optimization required for high-performance proteins.</p>
+                        <h3 class="text-xl font-bold text-[#94d2bd]">Machine Learning for Optimization and Function Prediction</h3>
+                        <p class="mt-2 text-gray-300">Machine learning models refine AI-generated or existing proteins. By learning the complex relationships between sequence, structure, and function, these models predict how mutations will affect properties like stability or binding affinity. This guides the engineering process, reducing the need for costly laboratory screening.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="ecosystem" class="scroll-mt-20 mb-16">
-            <h2 class="text-3xl font-bold section-title mb-2">Innovation Ecosystem</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">A dynamic ecosystem of companies, from agile startups to established giants, is driving innovation. Use the filters to explore profiles of key players and their focus areas. The table highlights their core technology and notable partnerships or funding, demonstrating the strategic importance of collaboration in this sector.</p>
+        <section id="ecosystem" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Innovation Ecosystem</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">A dynamic ecosystem of companies, from agile startups to established giants, is driving innovation. Use the filters to explore profiles of key players and their focus areas.</p>
 
-            <div class="flex space-x-2 mb-4">
-                <button class="company-filter-btn active bg-slate-200 text-slate-700 py-2 px-4 rounded-full text-sm font-semibold" data-filter="all">All</button>
-                <button class="company-filter-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-full text-sm font-semibold" data-filter="established">Established Leaders</button>
-                <button class="company-filter-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-full text-sm font-semibold" data-filter="startup">Emerging Startups</button>
+            <div class="flex justify-center space-x-2 mb-6">
+                <button class="company-filter-btn active bg-[#0a9396] text-white py-2 px-4 rounded-full text-sm font-semibold" data-filter="all">All</button>
+                <button class="company-filter-btn bg-[#005f73] text-gray-200 hover:bg-[#0a9396] hover:text-white py-2 px-4 rounded-full text-sm font-semibold" data-filter="established">Established Leaders</button>
+                <button class="company-filter-btn bg-[#005f73] text-gray-200 hover:bg-[#0a9396] hover:text-white py-2 px-4 rounded-full text-sm font-semibold" data-filter="startup">Emerging Startups</button>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-x-auto">
-                <table class="w-full text-sm text-left text-slate-500">
-                    <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+            <div class="bg-[#002933] rounded-xl shadow-2xl border border-teal-800 overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-300">
+                    <thead class="text-xs text-black uppercase bg-[#94d2bd]">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Company</th>
+                            <th scope="col" class="px-6 py-3 rounded-l-lg">Company</th>
                             <th scope="col" class="px-6 py-3">Focus / Application</th>
                             <th scope="col" class="px-6 py-3">AI Approach / Technology</th>
-                            <th scope="col" class="px-6 py-3">Notable Highlight</th>
+                            <th scope="col" class="px-6 py-3 rounded-r-lg">Notable Highlight</th>
                         </tr>
                     </thead>
                     <tbody id="company-table-body">
@@ -233,135 +206,140 @@
             </div>
         </section>
 
-        <section id="business" class="scroll-mt-20 mb-16">
-             <h2 class="text-3xl font-bold section-title mb-2">Industry Business Models & Strategies</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">Companies in this space employ diverse strategies to monetize their technology, from selling software to developing their own drugs. Click on the models below to understand the different approaches and the critical role of data and strategic alliances.</p>
+        <section id="business" class="mb-24">
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Industry Business Models & Strategies</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">Companies in this space employ diverse strategies to monetize their technology. Click on the models below to understand the different approaches.</p>
             <div class="space-y-4" id="business-model-accordion">
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Platform/Software as a Service (PaaS/SaaS)</h3>
-                        <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Platform/Software as a Service (PaaS/SaaS)</h3>
+                        <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
                     </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600">This model involves selling access to AI design platforms on a subscription basis. It democratizes advanced AI, allowing a wide range of customers (academia, biotech startups, pharma) to use cutting-edge tools without building them in-house. This provides a scalable revenue stream for the provider. <br><strong>Examples:</strong> Schrödinger, Levitate Bio.</p>
-                    </div>
-                </div>
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Custom Design & Collaborative Research</h3>
-                         <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
-                    </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600">Companies offer their specialized expertise to solve specific protein engineering challenges for clients. This is often structured as a collaborative research project with shared risks and rewards (e.g., fee-for-service plus milestones). This model provides valuable revenue and exposes the AI platform to new data and design problems, creating a data flywheel. <br><strong>Examples:</strong> Arzeda, Biomatter.</p>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300">This model involves selling access to AI design platforms on a subscription basis. It democratizes advanced AI, allowing a wide range of customers to use cutting-edge tools. <br><strong>Examples:</strong> Schrödinger, Levitate Bio.</p>
                     </div>
                 </div>
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Therapeutics Development & Licensing</h3>
-                         <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Custom Design & Collaborative Research</h3>
+                         <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
                     </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600">This high-risk, high-reward model involves using the proprietary AI platform to discover and develop an in-house pipeline of drugs. The goal is to create high-value therapeutic assets that can be licensed to large pharmaceutical companies for late-stage development and commercialization, generating revenue through upfront fees, milestones, and royalties. <br><strong>Examples:</strong> Generate Biomedicines, AI Proteins, Recursion.</p>
-                    </div>
-                </div>
-                 <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Hybrid Models</h3>
-                         <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
-                    </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600">Many companies employ a hybrid approach, combining elements of SaaS, services, and internal development. This diversifies revenue streams, maximizes the utility of the core AI platform, and creates multiple channels for strategic data acquisition, which is critical for improving the AI models. <br><strong>Examples:</strong> Schrödinger, Profluent Bio.</p>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300">Companies offer specialized expertise to solve specific protein engineering challenges for clients, often structured as collaborative research projects with shared risks and rewards. This creates a data flywheel. <br><strong>Examples:</strong> Arzeda, Biomatter.</p>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="applications" class="scroll-mt-20 mb-16">
-            <h2 class="text-3xl font-bold section-title mb-2">Expanding Horizons: Real-World Applications</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">The impact of AI-engineered proteins extends far beyond the lab, creating transformative solutions across multiple industries. Explore the key application areas where this technology is making a difference.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-3">Next-Generation Therapeutics</h3>
-                    <p class="text-slate-600">AI is accelerating the design of safer and more effective drugs. This includes next-gen antibodies with higher specificity, therapeutic enzymes to correct metabolic disorders, and novel vaccines. AI's ability to perform multi-parameter optimization (balancing affinity, stability, immunogenicity, etc.) is key to creating superior medicines.</p>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Therapeutics Development & Licensing</h3>
+                         <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300">This high-risk, high-reward model involves using a proprietary AI platform to discover and develop an in-house pipeline of drugs, aiming to create high-value therapeutic assets for licensing. <br><strong>Examples:</strong> Generate Biomedicines, AI Proteins, Recursion.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-3">Sustainable Industries</h3>
-                    <p class="text-slate-600">Custom-designed enzymes are enabling a shift to a green bioeconomy. They serve as highly efficient biocatalysts for sustainable chemical manufacturing, biofuel production, and waste remediation (e.g., degrading plastics). These enzymes operate under mild conditions, reducing energy use and hazardous waste compared to traditional chemical processes.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-3">Innovative Agriculture</h3>
-                    <p class="text-slate-600">AI-assisted protein engineering helps create crops with enhanced traits. This includes improved resistance to pests and diseases, better tolerance to environmental stress like drought, and increased nutritional value (biofortification). This directly addresses global challenges of food security and climate change resilience.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-semibold text-slate-800 mb-3">Advanced Diagnostics</h3>
-                    <p class="text-slate-600">Engineered proteins are being used to create highly sensitive and specific biosensors for disease detection. AI also aids in analyzing complex proteomic data to discover new disease biomarkers. This creates a powerful synergy between diagnostics and therapeutics (theranostics), paving the way for personalized medicine.</p>
+                 <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Hybrid Models</h3>
+                         <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300">Many companies employ a hybrid approach, combining elements of SaaS, services, and internal development to diversify revenue and maximize data acquisition. <br><strong>Examples:</strong> Schrödinger, Profluent Bio.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="business-plan" class="scroll-mt-20">
-            <h2 class="text-3xl font-bold section-title mb-2">Enzosol: Strategic Business Plan</h2>
-            <p class="text-lg text-slate-600 mb-8 max-w-4xl">This plan outlines the strategic vision for Enzosol, a startup poised to capture value in the rapidly growing AI-driven protein design market. Our strategy leverages a cutting-edge technology platform and a hybrid business model to address key market needs.</p>
+        <section id="applications" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Expanding Horizons: Real-World Applications</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">The impact of AI-engineered proteins extends far beyond the lab, creating transformative solutions across multiple industries.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-xl font-bold mb-3 text-[#94d2bd]">Next-Gen Therapeutics</h3>
+                    <p class="text-gray-300">AI is accelerating the design of safer, more effective drugs, including next-gen antibodies, therapeutic enzymes, and novel vaccines. AI's ability to perform multi-parameter optimization is key to creating superior medicines.</p>
+                </div>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-xl font-bold mb-3 text-[#94d2bd]">Sustainable Industries</h3>
+                    <p class="text-gray-300">Custom-designed enzymes are enabling a shift to a green bioeconomy, serving as highly efficient biocatalysts for sustainable chemical manufacturing, biofuel production, and waste remediation.</p>
+                </div>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-xl font-bold mb-3 text-[#ee9b00]">Innovative Agriculture</h3>
+                    <p class="text-gray-300">AI-assisted protein engineering helps create crops with enhanced traits, including pest resistance, drought tolerance, and increased nutritional value, addressing global food security challenges.</p>
+                </div>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-xl font-bold mb-3 text-[#ee9b00]">Advanced Diagnostics</h3>
+                    <p class="text-gray-300">Engineered proteins are being used to create highly sensitive and specific biosensors for disease detection, while AI aids in discovering new disease biomarkers, paving the way for personalized medicine.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="business-plan" class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text">Enzosol: Strategic Business Plan</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">This plan outlines the strategic vision for Enzosol, a startup poised to capture value in the rapidly growing AI-driven protein design market.</p>
             <div class="space-y-4" id="plan-accordion">
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Executive Summary</h3>
-                        <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Executive Summary</h3>
+                        <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
                     </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600">Enzosol will provide an advanced AI-powered protein design platform to accelerate R&D for the biotechnology and pharmaceutical industries. Capitalizing on a market projected to exceed $10B by the early 2030s with a >15% CAGR, our mission is to make custom protein engineering faster, more precise, and more accessible. We will employ a hybrid business model, combining a tiered SaaS platform with high-value collaborative research projects to build a sustainable revenue base and a powerful data flywheel.</p>
-                    </div>
-                </div>
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Problem & Solution</h3>
-                        <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
-                    </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600"><strong>Problem:</strong> Traditional protein R&D is slow, expensive, and has a high failure rate due to the complexity of protein biology and the limitations of experimental screening. Small to mid-size biotech companies and academic labs often lack the resources to access cutting-edge AI design tools.<br><br><strong>Solution:</strong> Enzosol's AI platform integrates generative models for de novo design with ML for multi-parameter optimization. We solve the problem by: <br>1. <strong>Accelerating Timelines:</strong> Reducing *in silico* design from months to days. <br>2. <strong>Increasing Success Rates:</strong> "Failing faster" by computationally eliminating poor candidates and optimizing for manufacturability and efficacy early. <br>3. <strong>Democratizing Access:</strong> Providing a user-friendly, cloud-based platform accessible to a wider research community.</p>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300">Enzosol will provide an advanced AI-powered protein design platform to accelerate R&D for biotech and pharma. Capitalizing on a market projected to exceed $10B, our mission is to make custom protein engineering faster, more precise, and more accessible via a hybrid model combining a tiered SaaS platform with high-value collaborative research projects.</p>
                     </div>
                 </div>
-                <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Target Market & Business Model</h3>
-                        <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Problem & Solution</h3>
+                         <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
                     </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600"><strong>Initial Target Market:</strong><br>1. <strong>Biotechnology Startups:</strong> Companies needing to accelerate their R&D pipeline without heavy internal investment in AI.<br>2. <strong>Academic & Research Institutions:</strong> Labs requiring advanced computational tools for grant-funded research.<br><br><strong>Business Model (Hybrid):</strong><br>1. <strong>Platform-as-a-Service (PaaS):</strong> A tiered subscription model. A 'freemium' tier for basic tools will drive user adoption, with professional and enterprise tiers offering advanced generative features, increased compute, and dedicated support.<br>2. <strong>Collaborative Research:</strong> Fee-for-service projects with biotech partners to design bespoke proteins (e.g., industrial enzymes, therapeutic candidates). These projects provide revenue and invaluable, proprietary training data to continuously improve our core AI models.</p>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300"><strong>Problem:</strong> Traditional protein R&D is slow, expensive, and has a high failure rate. Small to mid-size companies often lack access to cutting-edge AI design tools.<br><br><strong>Solution:</strong> Enzosol's AI platform integrates generative models and ML optimization to accelerate timelines, increase success rates, and democratize access via a user-friendly, cloud-based platform.</p>
                     </div>
                 </div>
-                 <div class="accordion-item bg-white border border-slate-200 rounded-lg">
-                    <div class="accordion-header flex justify-between items-center p-4">
-                        <h3 class="font-semibold text-slate-800">Go-to-Market Strategy & Competitive Advantage</h3>
-                         <span class="text-sky-600 text-xl transform transition-transform duration-300">▼</span>
+                <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Target Market & Business Model</h3>
+                        <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
                     </div>
-                    <div class="accordion-content px-4 pb-4">
-                        <p class="text-slate-600"><strong>Go-to-Market Strategy (Year 1):</strong><br>1. Launch Enzosol's freemium platform to build a user base and brand recognition within academia.<br>2. Secure 2-3 pilot collaborative research projects with biotech startups to validate our platform on real-world problems and generate initial revenue.<br>3. Engage in content marketing (white papers, webinars) highlighting the power of our integrated design approach, referencing data from this market analysis.<br><br><strong>Competitive Advantage:</strong><br>Our edge lies in the seamless integration of our design stack. While competitors may focus on structure prediction or generative models alone, Enzosol's platform forms a complete "design-predict-optimize" loop. Our hybrid model creates a unique data flywheel, where insights from custom service projects directly enhance the power and predictive accuracy of our SaaS platform, creating a self-improving system that becomes more valuable with each new partner.</p>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300"><strong>Target Market:</strong> Biotech Startups and Academic & Research Institutions.<br><br><strong>Business Model (Hybrid):</strong> A tiered PaaS with a freemium level to drive adoption, alongside fee-for-service collaborative research projects with biotech partners to generate revenue and invaluable proprietary training data.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item bg-[#002933] border border-teal-800 rounded-xl">
+                    <div class="accordion-header flex justify-between items-center p-5 cursor-pointer">
+                        <h3 class="font-bold text-lg text-white">Go-to-Market & Competitive Advantage</h3>
+                         <span class="text-[#94d2bd] text-2xl transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="accordion-content px-5 pb-5">
+                        <p class="text-gray-300"><strong>Go-to-Market (Year 1):</strong> Launch freemium platform to build a user base, secure 2-3 pilot projects with biotech startups, and engage in content marketing.<br><br><strong>Competitive Advantage:</strong> Our edge lies in a complete "design-predict-optimize" loop. Our hybrid model creates a unique data flywheel, where insights from service projects enhance the power of our SaaS platform, creating a self-improving system.</p>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
     
-    <footer class="bg-slate-800 text-white mt-16">
-        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-slate-400">
-            <p>Enzosol: AI-Powered Protein Design. Data-driven insights for a new era of biology.</p>
-            <p>&copy; 2025 Enzosol. All Rights Reserved.</p>
-        </div>
+    <footer class="text-center py-6 border-t border-teal-900/50">
+        <p class="text-sm text-gray-500">Enzosol: AI-Powered Protein Design. Data-driven insights for a new era of biology.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const fontColor = '#e2e8f0'; // text-slate-200
+            const gridColor = 'rgba(10, 147, 150, 0.2)'; // teal-700 with opacity
+            const defaultTooltipOptions = {
+                backgroundColor: '#002933',
+                titleFont: { size: 14, weight: 'bold' },
+                bodyFont: { size: 12 },
+                padding: 10,
+                borderColor: '#0a9396',
+                borderWidth: 1,
+            };
+
             // Market Chart Data
             const marketData = {
                 labels: ['GlobeNewswire [1]', 'TowardsHealthcare [2]', 'Precedence Research [3]', 'Market Research Future [8]*', 'GlobeNewswire [4]', 'Coherent Market Insights [5]', 'ResearchAndMarkets.com [6]'],
                 datasets: [{
                     label: 'Forecasted Market Value (USD Billion)',
                     data: [7.8, 13.84, 17.83, 11.5, 8.33, 12.26, 5.74],
-                    backgroundColor: 'rgba(56, 189, 248, 0.6)', // sky-400
-                    borderColor: 'rgba(2, 132, 199, 1)', // sky-600
-                    borderWidth: 1,
+                    backgroundColor: ['#0a9396', '#94d2bd', '#e9d8a6', '#ee9b00', '#ca6702', '#bb3e03', '#ae2012'],
                     borderRadius: 4,
                 }]
             };
@@ -375,14 +353,15 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Market Value (USD Billions)'
-                            }
+                            grid: { color: gridColor },
+                            ticks: { color: fontColor },
+                            title: { display: true, text: 'Market Value (USD Billions)', color: fontColor }
                         },
                         x: {
-                           ticks: {
-                                callback: function(value, index, values) {
+                           grid: { display: false },
+                           ticks: { 
+                               color: fontColor,
+                               callback: function(value, index, values) {
                                     const label = this.getLabelForValue(value);
                                     if (label.length > 16) {
                                         return label.substring(0, 16) + '...';
@@ -393,16 +372,13 @@
                         }
                     },
                     plugins: {
-                        legend: {
-                            display: false,
-                        },
+                        legend: { display: false },
                         tooltip: {
+                            ...defaultTooltipOptions,
                             callbacks: {
                                 label: function(context) {
                                     let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    if (label) { label += ': '; }
                                     if (context.parsed.y !== null) {
                                         label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y) + 'B';
                                     }
@@ -433,11 +409,7 @@
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     tabContents.forEach(content => {
-                        if (content.id === targetContentId) {
-                            content.classList.remove('hidden');
-                        } else {
-                            content.classList.add('hidden');
-                        }
+                        content.classList.toggle('hidden', content.id !== targetContentId);
                     });
                 });
             });
@@ -463,8 +435,8 @@
                 const filteredCompanies = companies.filter(c => filter === 'all' || c.type === filter);
                 filteredCompanies.forEach(company => {
                     const row = `
-                        <tr class="bg-white border-b hover:bg-slate-50 company-row" data-type="${company.type}">
-                            <th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">${company.name}</th>
+                        <tr class="border-b border-teal-800 hover:bg-[#005f73]/30 company-row" data-type="${company.type}">
+                            <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">${company.name}</th>
                             <td class="px-6 py-4">${company.focus}</td>
                             <td class="px-6 py-4">${company.ai}</td>
                             <td class="px-6 py-4">${company.highlight}</td>
@@ -477,8 +449,12 @@
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const filter = button.getAttribute('data-filter');
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-[#0a9396]', 'text-white');
+                        btn.classList.add('bg-[#005f73]', 'text-gray-200');
+                    });
+                    button.classList.add('active', 'bg-[#0a9396]', 'text-white');
+                    button.classList.remove('bg-[#005f73]', 'text-gray-200');
                     renderTable(filter);
                 });
             });
@@ -499,7 +475,6 @@
                     header.addEventListener('click', () => {
                         const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
 
-                        // Close all other items within the same accordion
                         accordionItems.forEach(otherItem => {
                             if (otherItem !== item) {
                                 otherItem.querySelector('.accordion-content').style.maxHeight = '0px';
@@ -507,7 +482,6 @@
                             }
                         });
 
-                        // Toggle current item
                         if (isExpanded) {
                             content.style.maxHeight = '0px';
                             icon.style.transform = 'rotate(0deg)';
@@ -527,21 +501,18 @@
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('section');
 
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 80) {
-                        current = section.getAttribute('id');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
                     }
                 });
+            }, { rootMargin: '-30% 0px -70% 0px' });
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === current) {
-                        link.classList.add('active');
-                    }
-                });
+            sections.forEach(section => {
+                observer.observe(section);
             });
 
             navLinks.forEach(anchor => {
