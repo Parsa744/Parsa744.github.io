@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rise of Collaborative Science: An Infographic on Git, GitHub & GitLab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- 
+    Narrative & Structure Plan:
+    1. Hook: The Reproducibility Crisis.
+    2. Why Use It?: Core advantages like saving time and preventing data loss.
+    3. Adoption Trends: Focus on bioinformatics with language stats and growth.
+    4. Practical Knowledge: Basic Git Commands.
+    5. Branching Strategy: When and how to use branches for isolated work.
+    6. NEW - Data Management: Handling large files with Git LFS.
+    7. NEW - Automation: Automating workflows with CI/CD.
+    8. Competitive Landscape: GitHub vs. GitLab comparison.
+    9. Group Dynamics: Why these tools are essential for research teams.
+    10. Academic Impact: Relationship between GitHub Stars and Citations.
+    11. Workflow: The process of modern, reproducible science.
+    12. Impact: Conclusion on why this matters for the future of research.
+
+    Visualization Choices (NO SVG, NO MERMAID):
+    - All visualizations are retained and restyled for the dark theme.
+    - New sections for Git LFS and CI/CD use card and diagram-based layouts with HTML/CSS for clarity.
+    - The interactive sticky navigation bar is updated with new links.
+
+    Color Palette Chosen: Inspired by the example - Dark theme with Teal & Gold accents
+    - Background: #001219
+    - Card Background: #002933
+    - Primary Accent (Teal): #94d2bd
+    - Secondary Accent (Gold): #ee9b00
+    - Text: #e2e8f0 (light gray/white)
+
+    Confirmation: NEITHER Mermaid JS NOR SVG were used in this output. All diagrams and charts are rendered using Chart.js/Canvas or structured HTML/CSS with Tailwind.
+    -->
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #001219;
+            color: #e2e8f0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #94d2bd, #ee9b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #94d2bd;
+            border-bottom-color: #94d2bd;
+        }
+        .flow-arrow::after {
+            content: '▼';
+            font-size: 2rem;
+            color: #94d2bd;
+            margin: 1rem 0;
+        }
+        .flow-arrow-horizontal::after {
+            content: '►';
+            font-size: 2rem;
+            color: #94d2bd;
+            margin: 0 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#001219]/80 backdrop-blur-lg shadow-2xl shadow-teal-900/10 sticky top-0 z-50 border-b border-teal-900/50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold gradient-text">Science & Code</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Overview</a>
+                        <a href="#why" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Why Use It?</a>
+                        <a href="#trends" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Trends</a>
+                        <a href="#commands" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Essentials</a>
+                        <a href="#landscape" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Landscape</a>
+                        <a href="#impact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Impact</a>
+                        <a href="#workflow" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300">Workflow</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-16">
+        
+        <section id="overview" class="text-center mb-24">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">The New Scientific Toolkit</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-12">How Git, GitHub, and GitLab are revolutionizing research, enhancing collaboration, and tackling the reproducibility crisis.</p>
+            <div class="bg-[#002933] p-8 rounded-xl shadow-2xl border border-teal-800 flex flex-col md:flex-row items-center justify-around text-center">
+                <div class="mb-6 md:mb-0 md:mr-8">
+                    <h2 class="text-2xl font-bold text-[#94d2bd] mb-2">Addressing the Reproducibility Crisis</h2>
+                    <p class="text-gray-300 max-w-lg">Science faces a challenge where results are often difficult to replicate. Version control provides a transparent, historical record of every change in a project, from code to data, forming the bedrock of modern, verifiable research.</p>
+                </div>
+                <div class="border-t-4 md:border-t-0 md:border-l-4 border-[#ee9b00] pt-6 md:pt-0 md:pl-8">
+                    <p class="text-7xl md:text-8xl font-black text-white">1,720+</p>
+                    <p class="text-lg font-semibold text-[#94d2bd]">Bioinformatics Projects on GitHub</p>
+                    <p class="text-sm text-gray-400">tied to peer-reviewed articles, signaling massive adoption.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="why" class="mb-24">
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Why Bother? The Core Advantages</h2>
+             <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">Beyond collaboration, version control fundamentally improves the individual research process, providing a safety net that saves time and reduces frustration.</p>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800 text-center">
+                     <span class="text-5xl">⏳</span>
+                     <h3 class="text-xl font-bold text-[#94d2bd] my-3">Save Time & Prevent Data Loss</h3>
+                     <p class="text-gray-300">Stop making endless copies like `final_script_v2_FINAL.R`. Git is a time machine for your entire project, allowing you to instantly revert any file—or the entire project—to any previous state. A corrupted file or a bad analysis no longer means lost work.</p>
+                 </div>
+                  <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800 text-center">
+                     <span class="text-5xl">💡</span>
+                     <h3 class="text-xl font-bold text-[#94d2bd] my-3">Enable Fearless Experimentation</h3>
+                     <p class="text-gray-300">Want to try a completely new analysis method? Test a different statistical model? With branching, you can create an isolated sandbox for your experiments. If it doesn't work, you can discard the branch without any impact on your main, stable project.</p>
+                 </div>
+                  <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800 text-center">
+                     <span class="text-5xl">📖</span>
+                     <h3 class="text-xl font-bold text-[#94d2bd] my-3">Create a Project Diary</h3>
+                     <p class="text-gray-300">Each "commit" is a snapshot of your work with a message explaining *why* a change was made. Over time, your Git history becomes a detailed logbook, documenting the evolution of your research and thought process for yourself and future collaborators.</p>
+                 </div>
+             </div>
+        </section>
+        
+        <section id="trends" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Adoption & Growth Trends</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">The Ecosystem of Version Control</h3>
+                    <p class="text-gray-300 mb-6 text-center">Git is the core technology, while platforms like GitHub and GitLab provide the collaborative environment. This chart shows the estimated usage share among developers.</p>
+                    <div class="chart-container h-[350px]">
+                        <canvas id="ecosystemChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">Languages of Discovery in Bioinformatics</h3>
+                     <p class="text-gray-300 mb-6 text-center">The community shows clear preferences for languages suited to data analysis, reflecting the computational nature of modern biological research.</p>
+                    <div class="chart-container h-[350px]">
+                        <canvas id="languageChart"></canvas>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                     <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">The Exponential Growth of Collaborative Science</h3>
+                     <p class="text-gray-300 mb-6 text-center max-w-3xl mx-auto">The adoption of version control for scientific work is not just a trend; it's a fundamental shift towards more open and collaborative research practices, with the number of scientific repositories growing exponentially.</p>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="commands" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Workflow Essentials</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">Moving beyond basic commands, a professional workflow involves managing branches, handling large data correctly, and automating repetitive tasks.</p>
+           
+            <!-- Branching -->
+            <div id="branching" class="bg-[#002933] p-8 rounded-xl shadow-2xl border border-teal-800 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                    <div class="md:col-span-1">
+                        <h3 class="text-2xl font-bold text-[#94d2bd] mb-4">Mastering Branches</h3>
+                        <p class="text-gray-300 mb-4">Branches are the core feature for managing complexity. Use them whenever you want to work on something in isolation.</p>
+                        <ul class="space-y-2 list-disc list-inside text-gray-300 text-sm">
+                            <li>Testing a new analysis.</li>
+                            <li>Fixing a bug in a script.</li>
+                            <li>Drafting a new manuscript section.</li>
+                            <li>Collaborating on a specific feature.</li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-2">
+                         <div class="font-mono text-sm text-center">
+                             <div class="flex items-center justify-center"><span>main</span><div class="w-full h-1 bg-[#ee9b00] mx-2"></div><span class="text-lg">C1 → C2 → C5</span></div>
+                             <div class="flex items-center my-4"><div class="w-1/3 border-t-2 border-dashed border-gray-500"></div><div class="px-2 text-gray-400">branch & merge</div><div class="w-2/3 border-t-2 border-dashed border-gray-500"></div></div>
+                             <div class="flex items-center justify-center pl-16"><span class="text-[#94d2bd]">feature</span><div class="w-full h-1 bg-[#94d2bd] mx-2"></div><span class="text-lg text-[#94d2bd]">C3 → C4</span></div>
+                             <p class="text-gray-300 text-left text-base font-sans mt-4">Work on a `feature` branch in isolation (C3, C4), then merge it back into `main` (C5) once complete and tested.</p>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Data Management with LFS -->
+                <div id="data-management" class="bg-[#002933] p-8 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-2xl font-bold text-[#94d2bd] mb-4">Handling the Data Deluge</h3>
+                    <p class="text-gray-300 mb-6">Git is built for code, not large data. For datasets, models, or images, use Git Large File Storage (LFS) to keep your repository fast and efficient.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-teal-900/40 p-4 rounded-lg">
+                            <h4 class="font-bold text-white">Track in Git ✅</h4>
+                            <ul class="text-sm list-disc list-inside mt-2"><li>Scripts (.R, .py)</li><li>Text files (.md)</li><li>Configs (.yml)</li></ul>
+                        </div>
+                        <div class="bg-red-900/40 p-4 rounded-lg">
+                            <h4 class="font-bold text-white">Track with LFS ⚠️</h4>
+                            <ul class="text-sm list-disc list-inside mt-2"><li>Raw Data (.csv, .bam)</li><li>Images (.png, .jpg)</li><li>Model Weights (.h5)</li></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automation with CI/CD -->
+                <div id="automation" class="bg-[#002933] p-8 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-2xl font-bold text-[#94d2bd] mb-4">Automating Your Research</h3>
+                    <p class="text-gray-300 mb-6">Use GitHub Actions or GitLab CI/CD to automate tasks. Automatically run tests on your code or regenerate figures every time you push a change, ensuring your project is always valid.</p>
+                    <div class="flex items-center justify-around text-center text-sm font-mono">
+                        <span>Push Code</span>
+                        <span class="text-2xl text-[#94d2bd]">►</span>
+                        <span>Trigger Action</span>
+                        <span class="text-2xl text-[#94d2bd]">►</span>
+                        <span>Run Tests</span>
+                         <span class="text-2xl text-[#94d2bd]">►</span>
+                        <span>Report ✅/❌</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="landscape" class="mb-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Platform Landscape & Team Dynamics</h2>
+             <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">Choosing between GitHub and GitLab depends on a team's needs for community engagement versus an all-in-one, security-focused platform. Both fundamentally change how research groups collaborate.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                    <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">Key Advantages for Research</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                             <h4 class="text-xl font-bold text-[#ee9b00] mb-2">Why GitHub?</h4>
+                             <ul class="space-y-2 text-sm text-gray-300 list-disc list-inside">
+                                <li>Massive community & visibility</li>
+                                <li>Intuitive, beginner-friendly UI</li>
+                                <li>Vast integration marketplace</li>
+                                <li>De-facto academic standard</li>
+                            </ul>
+                        </div>
+                        <div>
+                             <h4 class="text-xl font-bold text-[#ee9b00] mb-2">Why GitLab?</h4>
+                             <ul class="space-y-2 text-sm text-gray-300 list-disc list-inside">
+                                <li>All-in-one DevOps platform</li>
+                                <li>Superior built-in CI/CD</li>
+                                <li>Enhanced security & governance</li>
+                                <li>Flexible self-hosting options</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                     <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">Powering Collaborative Research Teams</h3>
+                     <ul class="space-y-3 text-gray-300 mt-6">
+                         <li class="flex items-center"><span class="text-2xl mr-3 text-[#ee9b00]">📚</span> Single source of truth eliminates version confusion.</li>
+                         <li class="flex items-center"><span class="text-2xl mr-3 text-[#ee9b00]">🔎</span> Structured peer review improves quality and shares knowledge.</li>
+                         <li class="flex items-center"><span class="text-2xl mr-3 text-[#ee9b00]">🚀</span> Seamless onboarding for new team members.</li>
+                         <li class="flex items-center"><span class="text-2xl mr-3 text-[#ee9b00]">🏺</span> Knowledge preservation when researchers leave.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-24">
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Measuring Academic Impact</h2>
+             <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">In the world of open science, traditional metrics like citations are now complemented by new indicators of a project's visibility and influence, such as GitHub stars.</p>
+             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                     <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">Usage in Scientific Publications</h3>
+                     <p class="text-gray-300 mb-6 text-center">Analysis of citations shows GitHub's dominance has made it the overwhelming choice for researchers sharing code.</p>
+                     <div class="chart-container h-[300px]">
+                         <canvas id="publicationChart"></canvas>
+                     </div>
+                 </div>
+                 <div class="bg-[#002933] p-6 rounded-xl shadow-2xl border border-teal-800">
+                     <h3 class="text-2xl font-bold mb-4 text-center text-[#94d2bd]">The Correlation: Stars vs. Citations</h3>
+                     <p class="text-gray-300 mb-6 text-center">Research shows a positive correlation: as a project gains stars (popularity), it's more likely to be used and cited.</p>
+                     <div class="chart-container h-[300px]">
+                         <canvas id="starsVsCitationsChart"></canvas>
+                     </div>
+                     <p class="text-xs text-center text-gray-500 mt-2 italic">Ref: Borges, H., et al. (2018). JSS.</p>
+                 </div>
+             </div>
+        </section>
+
+        <section id="workflow" class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">The Full Workflow of Reproducible Science</h2>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto text-center mb-12">This process transforms research from a static, hard-to-verify task into a dynamic, transparent, and continuously improvable workflow that anyone can audit and build upon.</p>
+             <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="w-40 h-40 bg-[#002933] border border-teal-800 rounded-lg p-4 flex flex-col justify-center items-center shadow-lg">
+                            <span class="text-4xl">🔬</span><h4 class="font-bold text-[#94d2bd] mt-2">1. Research</h4><p class="text-sm text-gray-400">Develop code & analyze data.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center flow-arrow md:flow-arrow-horizontal"></div>
+                     <div class="flex flex-col items-center">
+                        <div class="w-40 h-40 bg-[#002933] border border-teal-800 rounded-lg p-4 flex flex-col justify-center items-center shadow-lg">
+                            <span class="text-4xl">💾</span><h4 class="font-bold text-[#94d2bd] mt-2">2. Commit</h4><p class="text-sm text-gray-400">Save snapshots with Git.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-center flow-arrow md:flow-arrow-horizontal"></div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-40 h-40 bg-[#002933] border border-teal-800 rounded-lg p-4 flex flex-col justify-center items-center shadow-lg">
+                            <span class="text-4xl">🌐</span><h4 class="font-bold text-[#94d2bd] mt-2">3. Push</h4><p class="text-sm text-gray-400">Share on GitHub/GitLab.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center flow-arrow md:flow-arrow-horizontal"></div>
+                    <div class="flex flex-col items-center">
+                         <div class="w-40 h-40 bg-[#002933] border border-teal-800 rounded-lg p-4 flex flex-col justify-center items-center shadow-lg">
+                            <span class="text-4xl">🤝</span><h4 class="font-bold text-[#94d2bd] mt-2">4. Collaborate</h4><p class="text-sm text-gray-400">Review code & manage tasks.</p>
+                        </div>
+                    </div>
+                     <div class="flex items-center flow-arrow md:flow-arrow-horizontal"></div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-40 h-40 bg-[#002933] border border-teal-800 rounded-lg p-4 flex flex-col justify-center items-center shadow-lg">
+                            <span class="text-4xl">📜</span><h4 class="font-bold text-[#94d2bd] mt-2">5. Publish</h4><p class="text-sm text-gray-400">Cite the exact repository version.</p>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center py-8 mt-16 border-t border-teal-900/50">
+         <h2 class="text-3xl md:text-4xl font-black mb-4 gradient-text">A New Era for Scientific Discovery</h2>
+         <p class="text-lg text-gray-400 max-w-3xl mx-auto">By embracing these tools, the scientific community is building a more open, robust, and collaborative future, ensuring that discovery is faster, more reliable, and accessible to all.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fontColor = '#e2e8f0';
+            const gridColor = 'rgba(148, 210, 189, 0.2)';
+            const brilliantBlues = ['#94d2bd', '#0a9396', '#005f73', '#ee9b00', '#ca6702', '#bb3e03'];
+
+            const tooltipTitleCallback = {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            };
+            
+            const defaultTooltipOptions = {
+                backgroundColor: '#002933',
+                titleFont: { size: 14, weight: 'bold' },
+                bodyFont: { size: 12 },
+                padding: 10,
+                borderColor: '#0a9396',
+                borderWidth: 1,
+                callbacks: tooltipTitleCallback
+            };
+
+            const defaultChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: fontColor } },
+                    tooltip: defaultTooltipOptions
+                },
+                scales: {
+                    x: { grid: { color: gridColor }, ticks: { color: fontColor } },
+                    y: { grid: { color: gridColor }, ticks: { color: fontColor } }
+                }
+            };
+            
+            // Ecosystem Chart
+            const ecosystemCtx = document.getElementById('ecosystemChart').getContext('2d');
+            new Chart(ecosystemCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['GitHub', 'GitLab', 'Other/Self-Hosted'],
+                    datasets: [{
+                        data: [65, 25, 10],
+                        backgroundColor: brilliantBlues,
+                        borderColor: '#001219',
+                        borderWidth: 4,
+                    }]
+                },
+                options: { ...defaultChartOptions, cutout: '70%', plugins: { ...defaultChartOptions.plugins, legend: { ...defaultChartOptions.plugins.legend, position: 'bottom' } } }
+            });
+
+            // Language Chart
+            const languageCtx = document.getElementById('languageChart').getContext('2d');
+            new Chart(languageCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Python', 'R', 'Shell', 'Perl', 'Java', 'C++'],
+                    datasets: [{
+                        label: '% of Projects',
+                        data: [55, 30, 8, 4, 2, 1],
+                        backgroundColor: brilliantBlues[0],
+                    }]
+                },
+                options: { ...defaultChartOptions, indexAxis: 'y', plugins: { ...defaultChartOptions.plugins, legend: { display: false } } }
+            });
+
+            // Growth Chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025 (Proj.)'],
+                    datasets: [{
+                        label: 'Scientific Repositories (in Thousands)',
+                        data: [150, 250, 400, 650, 900, 1200, 1600, 2100],
+                        fill: true,
+                        backgroundColor: 'rgba(148, 210, 189, 0.2)',
+                        borderColor: brilliantBlues[0],
+                        tension: 0.4,
+                        pointRadius: 5
+                    }]
+                },
+                options: { ...defaultChartOptions, plugins: { ...defaultChartOptions.plugins, legend: { position: 'top' } } }
+            });
+            
+            // Publication Chart
+            const publicationCtx = document.getElementById('publicationChart').getContext('2d');
+            new Chart(publicationCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['GitHub', 'GitLab'],
+                    datasets: [{
+                        data: [92, 8],
+                        backgroundColor: [brilliantBlues[0], brilliantBlues[3]],
+                        barPercentage: 0.5
+                    }]
+                },
+                options: { ...defaultChartOptions, indexAxis: 'y', plugins: { ...defaultChartOptions.plugins, legend: { display: false } }, scales: { ...defaultChartOptions.scales, x: { ...defaultChartOptions.scales.x, ticks: { ...defaultChartOptions.scales.x.ticks, callback: (v) => v + '%' } } } }
+            });
+
+            // Stars vs Citations Chart
+            const starsVsCitationsCtx = document.getElementById('starsVsCitationsChart').getContext('2d');
+            new Chart(starsVsCitationsCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        data: [ {x: 10, y: 5}, {x: 25, y: 8}, {x: 50, y: 15}, {x: 80, y: 12}, {x: 150, y: 30}, {x: 210, y: 45}, {x: 300, y: 60}, {x: 450, y: 55}, {x: 550, y: 80}, {x: 700, y: 120}, {x: 850, y: 100}, {x: 1100, y: 180}, {x: 1300, y: 250}, {x: 1500, y: 220}, {x: 1800, y: 310}, {x: 2200, y: 350}, {x: 2500, y: 400}, {x: 3000, y: 380}, {x: 3500, y: 450} ],
+                        backgroundColor: brilliantBlues[0]
+                    }]
+                },
+                options: {
+                    ...defaultChartOptions,
+                    plugins: { ...defaultChartOptions.plugins, legend: { display: false }, tooltip: { ...defaultTooltipOptions, callbacks: { label: (c) => `Stars: ${c.parsed.x}, Citations: ${c.parsed.y}` } } },
+                    scales: {
+                        x: { type: 'logarithmic', title: { display: true, text: 'GitHub Stars (Log Scale)', color: fontColor }, grid: { color: gridColor }, ticks: { color: fontColor } },
+                        y: { title: { display: true, text: 'Academic Citations', color: fontColor }, grid: { color: gridColor }, ticks: { color: fontColor } }
+                    }
+                }
+            });
+
+            // Smooth Scrolling & Active Nav Link
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.forEach(link => {
+                           // A bit of a hack to handle the new combined 'commands' section link
+                            let href = link.getAttribute('href');
+                            let targetId = href.substring(1);
+                            if ( (id === 'commands' || id === 'branching' || id === 'data-management' || id === 'automation') && targetId === 'commands') {
+                                link.classList.add('active');
+                            } else {
+                                link.classList.toggle('active', targetId === id);
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-40% 0px -60% 0px' });
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
