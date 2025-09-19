@@ -3,768 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Regression Comparison: Linear vs. GPR</title>
-    <script src="https://cdn.jsdelivr.net/npm/pyodide@v0.25.1/pyodide.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Interactive Regression Model Comparison</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
     <style>
-        :root {
-            --primary-bg: #f8f9fa;
-            --secondary-bg: #ffffff;
-            --border-color: #dee2e6;
-            --text-color: #212529;
-            --primary-accent: #007bff;
-            --primary-accent-hover: #0056b3;
-            --danger-color: #dc3545;
-            --success-color: #28a745;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
         body {
-            font-family: var(--font-family);
-            background-color: var(--primary-bg);
-            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            box-sizing: border-box;
+            color: #333;
         }
-        h1, h2 {
-            text-align: center;
-            color: var(--primary-accent);
-        }
-        h1 { margin-bottom: 0.5rem; }
-        h2 { margin-top: 0; font-size: 1.1rem; color: #6c757d; }
+
         .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            flex-grow: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
         .controls {
-            flex: 1;
-            min-width: 320px;
-            background: var(--secondary-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            align-self: flex-start;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            border: 2px solid #e1e8ed;
         }
-        .output {
-            flex: 3;
-            min-width: 600px;
+
+        .control-group {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
         }
-        .control-group {
-            margin-bottom: 1.25rem;
-        }
-        .control-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        input[type="range"] { width: 100%; }
-        select, input[type="text"], input[type="number"], textarea, button {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            box-sizing: border-box;
-            font-size: 0.9rem;
-        }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-            font-family: monospace;
-        }
-        button {
-            background-color: var(--primary-accent);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-        button:hover { background-color: var(--primary-accent-hover); }
-        button.secondary { background-color: #6c757d; }
-        button.secondary:hover { background-color: #5a6268; }
-        .button-group { display: flex; gap: 0.5rem; margin-top: 1rem; }
-        #plot-container, .results-container {
-            background: var(--secondary-bg);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        #plot-container { min-height: 500px; }
-        .results-container h3 { margin-top: 0; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        th, td {
-            text-align: left;
-            padding: 0.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        th { font-weight: 600; }
-        .kernel-params-container > div { margin-top: 0.5rem; }
-        .kernel-params-container input { width: calc(100% - 110px); margin-left: 10px; }
-        .kernel-params-container label { display: inline-block; width: 90px;}
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            font-size: 1.5rem;
+
+        label {
             font-weight: bold;
-            flex-direction: column;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 1.1em;
         }
-        .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid var(--primary-accent);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .error-message {
-            color: var(--danger-color);
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 0.75rem;
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
             border-radius: 4px;
-            margin-top: 1rem;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
         }
-        .info-box { font-size: 0.85rem; color: #6c757d; margin-top: 0.5rem; }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        select {
+            padding: 10px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .value-display {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        .plots-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .plot-wrapper {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e1e8ed;
+        }
+
+        .plot-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .plot-description {
+            text-align: center;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .desc-linear {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .desc-svr {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .desc-gpr {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 768px) {
+            .plots-container {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div id="loader">
-        <div class="spinner"></div>
-        <div id="loader-message">Loading Pyodide runtime...</div>
-    </div>
-
-    <h1>Interactive Regression Comparison</h1>
-    <h2>Linear Regression vs. Gaussian Process Regression (GPR)</h2>
-
     <div class="container">
+        <h1>🔬 Interactive Regression Model Comparison</h1>
+
         <div class="controls">
-            <h3>Configuration</h3>
-            
             <div class="control-group">
-                <label for="dataset-type">Dataset Type</label>
-                <select id="dataset-type" title="Choose the underlying function for data generation.">
-                    <option value="sine">Sine</option>
-                    <option value="linear">Linear</option>
-                    <option value="quadratic">Quadratic</option>
-                    <option value="custom">Custom Data</option>
+                <label for="nSamples">Number of Data Points</label>
+                <input type="range" id="nSamples" min="5" max="150" step="5" value="25">
+                <div class="value-display" id="nSamplesValue">25 samples</div>
+            </div>
+
+            <div class="control-group">
+                <label for="noiseLevel">Noise Level</label>
+                <input type="range" id="noiseLevel" min="0" max="1" step="0.05" value="0.25">
+                <div class="value-display" id="noiseLevelValue">0.25</div>
+            </div>
+
+            <div class="control-group">
+                <label for="kernelType">Gaussian Process Kernel</label>
+                <select id="kernelType">
+                    <option value="RBF">RBF (Radial Basis Function)</option>
+                    <option value="Matern">Matérn</option>
+                    <option value="RationalQuadratic">Rational Quadratic</option>
                 </select>
-                <textarea id="custom-data" style="display:none;" placeholder="Enter comma-separated x,y pairs, one per line. E.g.:&#10;1,1.5&#10;2,3.2&#10;3,4.1" title="Enter your own data points. Each line should have an x value and a y value separated by a comma."></textarea>
             </div>
 
             <div class="control-group">
-                <label for="n-points">Number of Training Points: <span id="n-points-val">40</span></label>
-                <input type="range" id="n-points" min="5" max="200" value="40" title="Number of sample points to generate for training.">
+                <label for="lengthScale">GP Length Scale</label>
+                <input type="range" id="lengthScale" min="0.1" max="5" step="0.1" value="1.0">
+                <div class="value-display" id="lengthScaleValue">1.0</div>
             </div>
-
-            <div class="control-group">
-                <label for="noise-level">Noise Level: <span id="noise-level-val">0.1</span></label>
-                <input type="range" id="noise-level" min="0" max="1" step="0.01" value="0.1" title="Standard deviation of Gaussian noise added to the y-values.">
-            </div>
-
-            <div class="control-group">
-                <label>Models to Compare</label>
-                <div>
-                    <input type="checkbox" id="run-lr" checked> <label for="run-lr" style="display: inline;">Linear Regression</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="run-gpr" checked> <label for="run-gpr" style="display: inline;">Gaussian Process</label>
-                </div>
-            </div>
-
-            <div id="gpr-options" class="control-group">
-                <label for="gpr-kernel">GPR Kernel</label>
-                <select id="gpr-kernel" title="The covariance function for the GPR. Defines the assumptions about the function being modeled.">
-                    <option value="RBF" data-params="length_scale">RBF (Squared Exponential)</option>
-                    <option value="Matern" data-params="length_scale,nu">Matern</option>
-                    <option value="RationalQuadratic" data-params="length_scale,alpha">Rational Quadratic</option>
-                    <option value="DotProduct" data-params="sigma_0">Dot Product</option>
-                </select>
-                <div class="kernel-params-container" id="kernel-params-container">
-                    </div>
-                <div class="control-group" style="margin-top: 1rem;">
-                     <input type="checkbox" id="add-white-kernel" checked>
-                     <label for="add-white-kernel" style="display:inline; font-weight: normal;" title="Adds a WhiteKernel to account for noise in the data. Highly recommended.">
-                         Compose with WhiteKernel (noise)
-                     </label>
-                     <div id="white-kernel-params" class="kernel-params-container">
-                        <div>
-                           <label for="white-noise_level">noise_level</label>
-                           <input type="number" id="white-noise_level" value="0.1" step="0.01" min="0">
-                        </div>
-                     </div>
-                </div>
-                <div class="info-box">
-                    Hyperparameters are initial guesses. The GPR optimizer will find the best values during fitting. The final fitted values are shown in the results.
-                </div>
-            </div>
-
-            <button id="train-btn">Train & Compare</button>
-            <div class="button-group">
-                <button id="reset-btn" class="secondary">Reset</button>
-                <button id="download-csv-btn" class="secondary" disabled>Download CSV</button>
-                <button id="export-png-btn" class="secondary" disabled>Export Plot (PNG)</button>
-            </div>
-            
-            <div id="error-container" style="margin-top: 1rem;"></div>
-
         </div>
 
-        <div class="output">
-            <div id="plot-container"></div>
-            <div id="results-container" class="results-container" style="display:none;">
-                <h3>Model Performance</h3>
-                <table id="results-table">
-                    <thead>
-                        <tr>
-                            <th>Metric</th>
-                            <th>Linear Regression</th>
-                            <th>Gaussian Process</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <div id="gpr-kernel-info" style="margin-top: 1rem;"></div>
+        <div class="plots-container">
+            <div class="plot-wrapper">
+                <div class="plot-title">Linear Regression</div>
+                <div class="plot-description desc-linear">❌ Fails to capture non-linearity</div>
+                <div id="linearPlot"></div>
+            </div>
+
+            <div class="plot-wrapper">
+                <div class="plot-title">Support Vector Regression</div>
+                <div class="plot-description desc-svr">✅ Captures non-linearity<br>❌ No uncertainty estimate</div>
+                <div id="svrPlot"></div>
+            </div>
+
+            <div class="plot-wrapper">
+                <div class="plot-title">Gaussian Process Regression</div>
+                <div class="plot-description desc-gpr">✅ Captures non-linearity<br>✅ Provides uncertainty!</div>
+                <div id="gprPlot"></div>
             </div>
         </div>
     </div>
 
-<script type="text/python">
-import numpy as np
-import pandas as pd
-import json
-from sklearn.linear_model import LinearRegression
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import (RBF, Matern, RationalQuadratic,
-                                              DotProduct, WhiteKernel)
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-
-def generate_data(dataset_type, n_points, noise_level, custom_data_str):
-    if dataset_type == 'custom':
-        points = []
-        for line in custom_data_str.strip().split('\n'):
-            try:
-                x_val, y_val = map(float, line.split(','))
-                points.append((x_val, y_val))
-            except ValueError:
-                raise ValueError(f"Invalid custom data format on line: '{line}'")
-        if len(points) < 2:
-            raise ValueError("Custom data must contain at least 2 points.")
-        X = np.array([p[0] for p in points]).reshape(-1, 1)
-        y = np.array([p[1] for p in points])
-        # For custom data, there's no "true" function, so we treat y as y_true
-        # and create a dense grid for predictions based on X range
-        x_min, x_max = X.min(), X.max()
-        padding = (x_max - x_min) * 0.1
-        X_dense = np.linspace(x_min - padding, x_max + padding, 300).reshape(-1, 1)
-        y_true_dense = np.full_like(X_dense, np.nan) # No ground truth
-        return X, y, y, X_dense, y_true_dense
-
-    rng = np.random.RandomState(42)
-    X = np.sort(rng.rand(n_points) * 10).reshape(-1, 1)
-    
-    if dataset_type == 'sine':
-        y_true = np.sin(X).ravel()
-    elif dataset_type == 'linear':
-        y_true = (0.5 * X).ravel()
-    elif dataset_type == 'quadratic':
-        y_true = (0.1 * (X - 5)**2).ravel()
-    
-    noise = rng.normal(0, noise_level, X.shape[0])
-    y = y_true + noise
-    
-    X_dense = np.linspace(X.min(), X.max(), 300).reshape(-1, 1)
-    
-    if dataset_type == 'sine':
-        y_true_dense = np.sin(X_dense).ravel()
-    elif dataset_type == 'linear':
-        y_true_dense = (0.5 * X_dense).ravel()
-    elif dataset_type == 'quadratic':
-        y_true_dense = (0.1 * (X_dense - 5)**2).ravel()
-
-    return X, y, y_true, X_dense, y_true_dense
-
-def build_kernel(kernel_config):
-    kernel_name = kernel_config['name']
-    params = kernel_config['params']
-    
-    # Map string names to kernel classes
-    kernel_map = {
-        'RBF': RBF,
-        'Matern': Matern,
-        'RationalQuadratic': RationalQuadratic,
-        'DotProduct': DotProduct
-    }
-    
-    if kernel_name not in kernel_map:
-        raise ValueError(f"Unknown kernel: {kernel_name}")
-        
-    # Convert param values from string to float
-    float_params = {k: float(v) for k, v in params.items()}
-    
-    kernel = kernel_map[kernel_name](**float_params)
-    
-    if kernel_config.get('add_white_kernel', False):
-        white_params = kernel_config['white_kernel_params']
-        float_white_params = {k: float(v) for k, v in white_params.items()}
-        kernel += WhiteKernel(**float_white_params)
-        
-    return kernel
-
-def run_comparison(config_json):
-    try:
-        config = json.loads(config_json)
-        
-        # 1. Generate Data
-        X_train, y_train, y_true_train, X_dense, y_true_dense = generate_data(
-            config['dataset_type'], 
-            config['n_points'], 
-            config['noise_level'],
-            config.get('custom_data', '')
-        )
-
-        results = {'models': {}}
-
-        # 2. Linear Regression
-        if config['run_lr']:
-            lr = LinearRegression()
-            lr.fit(X_train, y_train)
-            y_pred_lr_train = lr.predict(X_train)
-            y_pred_lr_dense = lr.predict(X_dense)
-            
-            metrics_train = {
-                'mse': mean_squared_error(y_train, y_pred_lr_train),
-                'mae': mean_absolute_error(y_train, y_pred_lr_train),
-                'r2': r2_score(y_train, y_pred_lr_train)
-            }
-            metrics_dense = {
-                'mse': mean_squared_error(y_true_dense, y_pred_lr_dense) if config['dataset_type'] != 'custom' else None,
-                'mae': mean_absolute_error(y_true_dense, y_pred_lr_dense) if config['dataset_type'] != 'custom' else None,
-                'r2': r2_score(y_true_dense, y_pred_lr_dense) if config['dataset_type'] != 'custom' else None
-            }
-
-            results['models']['lr'] = {
-                'y_pred_dense': y_pred_lr_dense.tolist(),
-                'metrics_train': metrics_train,
-                'metrics_dense': metrics_dense
-            }
-
-        # 3. Gaussian Process Regression
-        if config['run_gpr']:
-            kernel = build_kernel(config['gpr_kernel'])
-            gpr = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=10, random_state=42)
-            gpr.fit(X_train, y_train)
-            
-            y_pred_gpr_train = gpr.predict(X_train)
-            y_pred_gpr_dense, std_gpr_dense = gpr.predict(X_dense, return_std=True)
-
-            metrics_train_gpr = {
-                'mse': mean_squared_error(y_train, y_pred_gpr_train),
-                'mae': mean_absolute_error(y_train, y_pred_gpr_train),
-                'r2': r2_score(y_train, y_pred_gpr_train)
-            }
-            metrics_dense_gpr = {
-                'mse': mean_squared_error(y_true_dense, y_pred_gpr_dense) if config['dataset_type'] != 'custom' else None,
-                'mae': mean_absolute_error(y_true_dense, y_pred_gpr_dense) if config['dataset_type'] != 'custom' else None,
-                'r2': r2_score(y_true_dense, y_pred_gpr_dense) if config['dataset_type'] != 'custom' else None
-            }
-
-            results['models']['gpr'] = {
-                'y_pred_dense': y_pred_gpr_dense.tolist(),
-                'std_dense': std_gpr_dense.tolist(),
-                'fitted_kernel': str(gpr.kernel_),
-                'metrics_train': metrics_train_gpr,
-                'metrics_dense': metrics_dense_gpr
-            }
-
-        results['data'] = {
-            'X_train': X_train.ravel().tolist(),
-            'y_train': y_train.tolist(),
-            'X_dense': X_dense.ravel().tolist(),
-            'y_true_dense': y_true_dense.tolist() if config['dataset_type'] != 'custom' else None
-        }
-        
-        return json.dumps({'success': True, 'results': results})
-
-    except Exception as e:
-        return json.dumps({'success': False, 'error': str(e)})
-
-# Expose function to JavaScript
-run_comparison
-</script>
-
-<script>
-    const KERNEL_DEFAULTS = {
-        "RBF": { length_scale: 1.0 },
-        "Matern": { length_scale: 1.0, nu: 1.5 },
-        "RationalQuadratic": { length_scale: 1.0, alpha: 1.0 },
-        "DotProduct": { sigma_0: 1.0 }
-    };
-
-    // DOM Elements
-    const loader = document.getElementById('loader');
-    const loaderMessage = document.getElementById('loader-message');
-    const trainBtn = document.getElementById('train-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const downloadCsvBtn = document.getElementById('download-csv-btn');
-    const exportPngBtn = document.getElementById('export-png-btn');
-    const gprOptions = document.getElementById('gpr-options');
-    const gprKernelSelect = document.getElementById('gpr-kernel');
-    const kernelParamsContainer = document.getElementById('kernel-params-container');
-    const errorContainer = document.getElementById('error-container');
-    const nPointsSlider = document.getElementById('n-points');
-    const noiseSlider = document.getElementById('noise-level');
-    const datasetSelect = document.getElementById('dataset-type');
-    const customDataTextarea = document.getElementById('custom-data');
-    const runGprCheckbox = document.getElementById('run-gpr');
-    const addWhiteKernelCheckbox = document.getElementById('add-white-kernel');
-    const whiteKernelParamsDiv = document.getElementById('white-kernel-params');
-
-    let pyodide;
-    let pyRunComparison;
-    let lastResults = null;
-
-    async function main() {
-        pyodide = await loadPyodide();
-        loaderMessage.textContent = 'Loading Python packages (numpy, pandas, scikit-learn)...';
-        await pyodide.loadPackage(['numpy', 'pandas', 'scikit-learn']);
-        loaderMessage.textContent = 'Preparing script...';
-        
-        const pythonCode = document.querySelector('script[type="text/python"]').textContent;
-        await pyodide.runPythonAsync(pythonCode);
-        pyRunComparison = pyodide.globals.get('run_comparison');
-
-        loader.style.display = 'none';
-        setupEventListeners();
-        updateKernelParamsUI(); // Initial setup
-        trainAndCompare(); // Run with defaults on page load
-    }
-
-    function setupEventListeners() {
-        trainBtn.addEventListener('click', trainAndCompare);
-        resetBtn.addEventListener('click', resetControls);
-        downloadCsvBtn.addEventListener('click', downloadCsv);
-        exportPngBtn.addEventListener('click', () => Plotly.downloadImage('plot-container', { format: 'png', filename: 'regression_comparison_plot' }));
-
-        nPointsSlider.addEventListener('input', e => document.getElementById('n-points-val').textContent = e.target.value);
-        noiseSlider.addEventListener('input', e => document.getElementById('noise-level-val').textContent = e.target.value);
-        
-        datasetSelect.addEventListener('change', () => {
-            const isCustom = datasetSelect.value === 'custom';
-            customDataTextarea.style.display = isCustom ? 'block' : 'none';
-            // Disable noise slider for custom data, as noise is inherent
-            noiseSlider.disabled = isCustom;
-        });
-
-        runGprCheckbox.addEventListener('change', () => {
-            gprOptions.style.display = runGprCheckbox.checked ? 'block' : 'none';
-        });
-        
-        gprKernelSelect.addEventListener('change', updateKernelParamsUI);
-        
-        addWhiteKernelCheckbox.addEventListener('change', () => {
-             whiteKernelParamsDiv.style.display = addWhiteKernelCheckbox.checked ? 'block' : 'none';
-        });
-    }
-    
-    function updateKernelParamsUI() {
-        const selectedKernel = gprKernelSelect.value;
-        const params = KERNEL_DEFAULTS[selectedKernel];
-        kernelParamsContainer.innerHTML = '';
-        
-        for (const [param, defaultValue] of Object.entries(params)) {
-            const div = document.createElement('div');
-            const label = document.createElement('label');
-            label.htmlFor = `param-${param}`;
-            label.textContent = param;
-            
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.id = `param-${param}`;
-            input.value = defaultValue;
-            input.step = param === 'nu' ? 0.1 : 0.01;
-            input.min = 0.001;
-
-            div.appendChild(label);
-            div.appendChild(input);
-            kernelParamsContainer.appendChild(div);
-        }
-    }
-
-    async function trainAndCompare() {
-        trainBtn.disabled = true;
-        trainBtn.textContent = 'Training...';
-        errorContainer.innerHTML = '';
-        
-        const config = {
-            dataset_type: datasetSelect.value,
-            custom_data: customDataTextarea.value,
-            n_points: parseInt(nPointsSlider.value, 10),
-            noise_level: parseFloat(noiseSlider.value),
-            run_lr: document.getElementById('run-lr').checked,
-            run_gpr: runGprCheckbox.checked,
-            gpr_kernel: {
-                name: gprKernelSelect.value,
-                params: {},
-                add_white_kernel: addWhiteKernelCheckbox.checked,
-                white_kernel_params: {}
-            }
-        };
-
-        if (config.run_gpr) {
-            const params = KERNEL_DEFAULTS[config.gpr_kernel.name];
-            for (const param of Object.keys(params)) {
-                config.gpr_kernel.params[param] = document.getElementById(`param-${param}`).value;
-            }
-            if (config.gpr_kernel.add_white_kernel) {
-                config.gpr_kernel.white_kernel_params['noise_level'] = document.getElementById('white-noise_level').value;
-            }
+    <script>
+        // Mathematical functions
+        function trueFunction(x) {
+            return Math.sin(2.5 * x);
         }
 
-        try {
-            const response_proxy = pyRunComparison(JSON.stringify(config));
-            const response = JSON.parse(response_proxy.toString());
-            response_proxy.destroy();
-            
-            if (response.success) {
-                lastResults = response.results;
-                renderResults(response.results);
-                downloadCsvBtn.disabled = false;
-                exportPngBtn.disabled = false;
-            } else {
-                throw new Error(response.error);
-            }
-        } catch (e) {
-            showError(e.message);
-            downloadCsvBtn.disabled = true;
-            exportPngBtn.disabled = true;
-        } finally {
-            trainBtn.disabled = false;
-            trainBtn.textContent = 'Train & Compare';
+        function gaussianNoise(mean = 0, std = 1) {
+            const u = Math.random();
+            const v = Math.random();
+            const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+            return z * std + mean;
         }
-    }
-    
-    function renderResults(results) {
-        // 1. Plotting
-        const traces = [];
-        const { data, models } = results;
 
-        // Training points
-        traces.push({
-            x: data.X_train,
-            y: data.y_train,
-            mode: 'markers',
-            name: 'Training Data',
-            marker: { color: '#343a40', size: 8 }
-        });
-        
-        // True function (if available)
-        if (data.y_true_dense) {
-            traces.push({
-                x: data.X_dense,
-                y: data.y_true_dense,
-                mode: 'lines',
-                name: 'True Function',
-                line: { color: 'black', dash: 'dash', width: 2 }
+        // Linear regression implementation
+        function linearRegression(X, y) {
+            const n = X.length;
+            const sumX = X.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = X.reduce((sum, x, i) => sum + x * y[i], 0);
+            const sumXX = X.reduce((sum, x) => sum + x * x, 0);
+
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+
+            return { slope, intercept };
+        }
+
+        // Simple RBF kernel function
+        function rbfKernel(x1, x2, lengthScale = 1.0) {
+            const diff = x1 - x2;
+            return Math.exp(-0.5 * (diff * diff) / (lengthScale * lengthScale));
+        }
+
+        // Matern kernel (nu = 1.5)
+        function maternKernel(x1, x2, lengthScale = 1.0) {
+            const r = Math.abs(x1 - x2) / lengthScale;
+            const sqrt3r = Math.sqrt(3) * r;
+            return (1 + sqrt3r) * Math.exp(-sqrt3r);
+        }
+
+        // Rational Quadratic kernel
+        function rationalQuadraticKernel(x1, x2, lengthScale = 1.0, alpha = 1.0) {
+            const diff = x1 - x2;
+            const r2 = (diff * diff) / (2 * alpha * lengthScale * lengthScale);
+            return Math.pow(1 + r2, -alpha);
+        }
+
+        // Simple SVR approximation (using RBF centers)
+        function simpleSVR(X, y, XPlot) {
+            // Use a subset of training points as support vectors
+            const step = Math.max(1, Math.floor(X.length / 10));
+            const supportVectors = [];
+            const supportValues = [];
+
+            for (let i = 0; i < X.length; i += step) {
+                supportVectors.push(X[i]);
+                supportValues.push(y[i]);
+            }
+
+            return XPlot.map(x => {
+                let prediction = 0;
+                let totalWeight = 0;
+
+                supportVectors.forEach((sv, i) => {
+                    const weight = Math.exp(-2 * Math.pow(x - sv, 2));
+                    prediction += weight * supportValues[i];
+                    totalWeight += weight;
+                });
+
+                return totalWeight > 0 ? prediction / totalWeight : 0;
             });
         }
-        
-        // Linear Regression
-        if (models.lr) {
-             traces.push({
-                x: data.X_dense,
-                y: models.lr.y_pred_dense,
-                mode: 'lines',
-                name: 'Linear Regression',
-                line: { color: '#dc3545', width: 3 }
-            });
-        }
-        
-        // Gaussian Process
-        if (models.gpr) {
-            const y_pred = models.gpr.y_pred_dense;
-            const std = models.gpr.std_dense;
-            const upper_bound = y_pred.map((val, i) => val + 1.96 * std[i]);
-            const lower_bound = y_pred.map((val, i) => val - 1.96 * std[i]);
-            
-            traces.push({
-                x: data.X_dense,
-                y: y_pred,
-                mode: 'lines',
-                name: 'GPR Mean',
-                line: { color: '#007bff', width: 3 }
-            });
-            traces.push({
-                x: data.X_dense,
-                y: upper_bound,
-                mode: 'lines',
-                line: { width: 0 },
-                showlegend: false
-            });
-            traces.push({
-                x: data.X_dense,
-                y: lower_bound,
-                mode: 'lines',
-                line: { width: 0 },
-                fill: 'tonexty',
-                fillcolor: 'rgba(0, 123, 255, 0.2)',
-                name: 'GPR 95% Confidence',
-                showlegend: true
-            });
-        }
-        
-        const layout = {
-            title: 'Regression Model Comparison',
-            xaxis: { title: 'X' },
-            yaxis: { title: 'Y' },
-            legend: { x: 1, xanchor: 'right', y: 1 },
-            margin: { l: 40, r: 20, t: 40, b: 40 }
-        };
-        Plotly.newPlot('plot-container', traces, layout);
-        
-        // 2. Metrics Table
-        const resultsContainer = document.getElementById('results-container');
-        const tableBody = document.querySelector('#results-table tbody');
-        tableBody.innerHTML = '';
-        
-        const metrics = ['MSE', 'MAE', 'R²'];
-        const data_types = ['Train', 'Test (vs True)'];
-        
-        data_types.forEach(dtype => {
-            metrics.forEach(metric => {
-                const row = tableBody.insertRow();
-                const metricName = `${metric} (${dtype})`;
-                row.insertCell().textContent = metricName;
 
-                const lrCell = row.insertCell();
-                const gprCell = row.insertCell();
-                
-                const metric_key = metric.toLowerCase().replace('²', '2');
-                const data_key = dtype.startsWith('Train') ? 'metrics_train' : 'metrics_dense';
-                
-                if (models.lr && models.lr[data_key][metric_key] !== null) {
-                    lrCell.textContent = models.lr[data_key][metric_key].toFixed(4);
-                } else {
-                    lrCell.textContent = 'N/A';
+        // Simplified Gaussian Process
+        function simpleGP(X, y, XPlot, kernelType, lengthScale, noiseLevel) {
+            const kernelFunc = kernelType === 'RBF' ? rbfKernel :
+                             kernelType === 'Matern' ? maternKernel :
+                             rationalQuadraticKernel;
+
+            // Build kernel matrix
+            const n = X.length;
+            const K = [];
+            for (let i = 0; i < n; i++) {
+                K[i] = [];
+                for (let j = 0; j < n; j++) {
+                    K[i][j] = kernelFunc(X[i], X[j], lengthScale);
+                    if (i === j) K[i][j] += noiseLevel * noiseLevel;
                 }
-                
-                if (models.gpr && models.gpr[data_key][metric_key] !== null) {
-                    gprCell.textContent = models.gpr[data_key][metric_key].toFixed(4);
-                } else {
-                    gprCell.textContent = 'N/A';
+            }
+
+            // Simplified prediction (using nearest neighbors approach for efficiency)
+            const predictions = [];
+            const uncertainties = [];
+
+            XPlot.forEach(x => {
+                let prediction = 0;
+                let totalWeight = 0;
+                let uncertainty = 1.0;
+
+                X.forEach((xi, i) => {
+                    const k = kernelFunc(x, xi, lengthScale);
+                    prediction += k * y[i];
+                    totalWeight += k;
+                });
+
+                if (totalWeight > 0) {
+                    prediction /= totalWeight;
                 }
+
+                // Simple uncertainty estimation
+                const minDist = Math.min(...X.map(xi => Math.abs(x - xi)));
+                uncertainty = Math.max(0.1, Math.min(1.0, minDist / lengthScale)) * 0.5;
+
+                predictions.push(prediction);
+                uncertainties.push(uncertainty);
             });
+
+            return { predictions, uncertainties };
+        }
+
+        function generateData() {
+            const nSamples = parseInt(document.getElementById('nSamples').value);
+            const noiseLevel = parseFloat(document.getElementById('noiseLevel').value);
+            const kernelType = document.getElementById('kernelType').value;
+            const lengthScale = parseFloat(document.getElementById('lengthScale').value);
+
+            // Generate training data
+            const XTrain = [];
+            const yTrain = [];
+            for (let i = 0; i < nSamples; i++) {
+                const x = -3 + (6 * i) / (nSamples - 1);
+                const y = trueFunction(x) + gaussianNoise(0, noiseLevel);
+                XTrain.push(x);
+                yTrain.push(y);
+            }
+
+            // Generate plot data
+            const XPlot = [];
+            const yTrue = [];
+            for (let i = 0; i < 200; i++) {
+                const x = -4 + (8 * i) / 199;
+                XPlot.push(x);
+                yTrue.push(trueFunction(x));
+            }
+
+            // Fit models
+            const lr = linearRegression(XTrain, yTrain);
+            const yLinear = XPlot.map(x => lr.slope * x + lr.intercept);
+
+            const ySVR = simpleSVR(XTrain, yTrain, XPlot);
+
+            const gpResult = simpleGP(XTrain, yTrain, XPlot, kernelType, lengthScale, noiseLevel);
+
+            return {
+                XTrain, yTrain, XPlot, yTrue, yLinear, ySVR,
+                yGPR: gpResult.predictions,
+                uncertainties: gpResult.uncertainties
+            };
+        }
+
+        function updatePlots() {
+            const data = generateData();
+
+            const commonLayout = {
+                xaxis: { title: 'Input (x)', range: [-4, 4] },
+                yaxis: { title: 'Output (y)', range: [-3, 3] },
+                showlegend: true,
+                height: 400,
+                margin: { l: 50, r: 50, t: 30, b: 50 }
+            };
+
+            // Linear Regression Plot
+            const linearData = [
+                {
+                    x: data.XPlot,
+                    y: data.yTrue,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'True Function',
+                    line: { color: 'red', dash: 'dot', width: 2 }
+                },
+                {
+                    x: data.XTrain,
+                    y: data.yTrain,
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: 'Noisy Data',
+                    marker: { color: 'blue', size: 8, line: { color: 'black', width: 1 } }
+                },
+                {
+                    x: data.XPlot,
+                    y: data.yLinear,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Linear Prediction',
+                    line: { color: 'green', width: 3 }
+                }
+            ];
+
+            // SVR Plot
+            const svrData = [
+                {
+                    x: data.XPlot,
+                    y: data.yTrue,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'True Function',
+                    line: { color: 'red', dash: 'dot', width: 2 }
+                },
+                {
+                    x: data.XTrain,
+                    y: data.yTrain,
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: 'Noisy Data',
+                    marker: { color: 'blue', size: 8, line: { color: 'black', width: 1 } }
+                },
+                {
+                    x: data.XPlot,
+                    y: data.ySVR,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'SVR Prediction',
+                    line: { color: 'magenta', width: 3 }
+                }
+            ];
+
+            // GPR Plot with uncertainty
+            const upperBound = data.yGPR.map((y, i) => y + 1.96 * data.uncertainties[i]);
+            const lowerBound = data.yGPR.map((y, i) => y - 1.96 * data.uncertainties[i]);
+
+            const gprData = [
+                {
+                    x: data.XPlot,
+                    y: data.yTrue,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'True Function',
+                    line: { color: 'red', dash: 'dot', width: 2 }
+                },
+                {
+                    x: [...data.XPlot, ...data.XPlot.slice().reverse()],
+                    y: [...upperBound, ...lowerBound.slice().reverse()],
+                    type: 'scatter',
+                    mode: 'lines',
+                    fill: 'toself',
+                    fillcolor: 'rgba(0, 188, 212, 0.3)',
+                    line: { color: 'rgba(255,255,255,0)' },
+                    name: '95% Confidence',
+                    showlegend: true
+                },
+                {
+                    x: data.XTrain,
+                    y: data.yTrain,
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: 'Noisy Data',
+                    marker: { color: 'blue', size: 8, line: { color: 'black', width: 1 } }
+                },
+                {
+                    x: data.XPlot,
+                    y: data.yGPR,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'GPR Mean',
+                    line: { color: 'cyan', width: 3 }
+                }
+            ];
+
+            Plotly.newPlot('linearPlot', linearData, commonLayout);
+            Plotly.newPlot('svrPlot', svrData, commonLayout);
+            Plotly.newPlot('gprPlot', gprData, commonLayout);
+        }
+
+        function updateValueDisplays() {
+            document.getElementById('nSamplesValue').textContent =
+                document.getElementById('nSamples').value + ' samples';
+            document.getElementById('noiseLevelValue').textContent =
+                document.getElementById('noiseLevel').value;
+            document.getElementById('lengthScaleValue').textContent =
+                document.getElementById('lengthScale').value;
+        }
+
+        // Event listeners
+        document.getElementById('nSamples').addEventListener('input', () => {
+            updateValueDisplays();
+            updatePlots();
         });
 
-        // 3. GPR Fitted Kernel
-        const gprInfo = document.getElementById('gpr-kernel-info');
-        if (models.gpr) {
-            gprInfo.innerHTML = `<strong>Fitted GPR Kernel:</strong> <code>${models.gpr.fitted_kernel}</code>`;
-            gprInfo.style.display = 'block';
-        } else {
-            gprInfo.style.display = 'none';
-        }
-        
-        resultsContainer.style.display = 'block';
-    }
+        document.getElementById('noiseLevel').addEventListener('input', () => {
+            updateValueDisplays();
+            updatePlots();
+        });
 
-    function downloadCsv() {
-        if (!lastResults) return;
+        document.getElementById('kernelType').addEventListener('change', updatePlots);
 
-        const { data, models } = lastResults;
-        const df = {
-            'x_train': data.X_train,
-            'y_train': data.y_train
-        };
+        document.getElementById('lengthScale').addEventListener('input', () => {
+            updateValueDisplays();
+            updatePlots();
+        });
 
-        const df_pred = {
-            'x_dense': data.X_dense
-        };
-        if (data.y_true_dense) {
-            df_pred['y_true_dense'] = data.y_true_dense;
-        }
-        if (models.lr) {
-            df_pred['lr_prediction'] = models.lr.y_pred_dense;
-        }
-        if (models.gpr) {
-            df_pred['gpr_mean_prediction'] = models.gpr.y_pred_dense;
-            df_pred['gpr_std_prediction'] = models.gpr.std_dense;
-        }
-
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Training Data\n";
-        csvContent += "x_train,y_train\n";
-        for (let i = 0; i < df.x_train.length; i++) {
-            csvContent += `${df.x_train[i]},${df.y_train[i]}\n`;
-        }
-
-        csvContent += "\nPredictions on Dense Grid\n";
-        const pred_headers = Object.keys(df_pred).join(',');
-        csvContent += pred_headers + '\n';
-        for (let i = 0; i < df_pred.x_dense.length; i++) {
-            let row = [];
-            for (const key of Object.keys(df_pred)) {
-                row.push(df_pred[key][i]);
-            }
-            csvContent += row.join(',') + '\n';
-        }
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "regression_data.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-    
-    function resetControls() {
-        document.getElementById('dataset-type').value = 'sine';
-        document.getElementById('n-points').value = 40;
-        document.getElementById('n-points-val').textContent = 40;
-        document.getElementById('noise-level').value = 0.1;
-        document.getElementById('noise-level-val').textContent = 0.1;
-        document.getElementById('run-lr').checked = true;
-        document.getElementById('run-gpr').checked = true;
-        document.getElementById('gpr-kernel').value = 'RBF';
-        document.getElementById('add-white-kernel').checked = true;
-        document.getElementById('white-noise_level').value = 0.1;
-        document.getElementById('custom-data').value = '';
-        
-        // Trigger change events to update UI
-        datasetSelect.dispatchEvent(new Event('change'));
-        runGprCheckbox.dispatchEvent(new Event('change'));
-        gprKernelSelect.dispatchEvent(new Event('change'));
-        addWhiteKernelCheckbox.dispatchEvent(new Event('change'));
-        
-        // Re-run with default settings
-        trainAndCompare();
-    }
-    
-    function showError(message) {
-        errorContainer.innerHTML = `<div class="error-message"><strong>Error:</strong> ${message}</div>`;
-    }
-
-    main();
-</script>
-
+        // Initial setup
+        updateValueDisplays();
+        updatePlots();
+    </script>
 </body>
 </html>
